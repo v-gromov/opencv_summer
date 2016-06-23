@@ -31,7 +31,7 @@ face center_faces(QString image_name)
         }
         for(int i = 0; i < find_faces.size(); i++)
         {
-            qDebug()<<find_faces[i].number_eyes()<<"------"<<find_faces.size();
+            //qDebug()<<find_faces[i].number_eyes()<<"------"<<find_faces.size();
             if(find_faces[i].number_eyes()==2)
             {
                 case_value = 1;
@@ -49,7 +49,24 @@ void detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
                            CascadeClassifier& nestedCascade,
                            double scale, QVector <face> &find_faces)
 {
+    //ubrat
+    double t = 0;
     vector<Rect> faces;
+    const static Scalar colors[] =
+    {
+        Scalar(255,0,0),
+        Scalar(255,128,0),
+        Scalar(255,255,0),
+        Scalar(0,255,0),
+        Scalar(0,128,255),
+        Scalar(0,255,255),
+        Scalar(0,0,255),
+        Scalar(255,0,255)
+    };
+    //ubrat
+
+
+    //vector<Rect> faces;
     Mat gray, smallImg;
     cvtColor( img, gray, COLOR_BGR2GRAY );
     double fx = 1 / scale;
@@ -62,6 +79,9 @@ void detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
 
     for ( size_t i = 0; i < faces.size(); i++ )
     {
+        Scalar color = colors[i%8];//ubrat
+        int radius;//ubrat
+
         Rect r = faces[i];
         Mat smallImgROI;
         vector<Rect> nestedObjects;
@@ -90,8 +110,25 @@ void detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
             center.x = cvRound((r.x + nr.x + nr.width*0.5)*scale);
             center.y = cvRound((r.y + nr.y + nr.height*0.5)*scale);
             write_eyes_array.push_back(center);
+
+            radius = cvRound((nr.width + nr.height)*0.25*scale);//ubrat
+            circle( img, center, radius, color, 3, 8, 0 );//ubrat
         }
         find_faces[i].set_coord_eyes(write_eyes_array);
+
+        qDebug()<<"IM HERE";
+        if(nestedObjects.size()>0)
+        {
+            imshow( "result", img );//ubrat
+            char c = ' ';
+            while(c!=27)
+                c = cvWaitKey(33);
+            //destroyWindow("result");
+        }
+        else
+        {
+            imshow( "result", img );//ubrat
+        }
     }
 }
 

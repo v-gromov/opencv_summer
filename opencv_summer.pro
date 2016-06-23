@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    find_face_and_eyes.cpp
+    find_face_and_eyes.cpp \
+    crop_image.cpp
 
 HEADERS  += mainwindow.h \
-    find_face_and_eyes.h
+    find_face_and_eyes.h \
+    crop_image.h
 
 FORMS    += mainwindow.ui
 

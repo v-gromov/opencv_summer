@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <QFile>
 #include <QFileDialog>
 #include <QInputDialog>
 #include "opencv2/highgui/highgui.hpp"
@@ -16,8 +17,15 @@
 #include <iostream>
 #include <QString>
 #include "find_face_and_eyes.h"
+#include "crop_image.h"
 #include <QDebug>
 
+#include <QApplication>
+#include <math.h>
+#include <QDebug>
+#include <QLabel>
+#include <QThread>
+#include <QDesktopWidget>
 
 namespace Ui {
 class MainWindow;
@@ -33,6 +41,8 @@ public:
 
 private slots:
     void on_Button_create_database_clicked();
+
+    void on_Button_ok_clicked();
 
 private:
     Ui::MainWindow *ui;

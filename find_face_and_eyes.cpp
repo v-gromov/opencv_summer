@@ -116,8 +116,10 @@ void detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
         }
         find_faces[i].set_coord_eyes(write_eyes_array);
 
+
+        //open_image_in_lable(img);
         qDebug()<<"IM HERE";
-        if(nestedObjects.size()>0)
+        /*if(nestedObjects.size()>0)
         {
             imshow( "result", img );//ubrat
             char c = ' ';
@@ -128,7 +130,7 @@ void detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
         else
         {
             imshow( "result", img );//ubrat
-        }
+        }*/
     }
 }
 

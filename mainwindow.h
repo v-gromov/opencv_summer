@@ -37,6 +37,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    void open_image_in_lable(QImage img);
     ~MainWindow();
 
 private slots:

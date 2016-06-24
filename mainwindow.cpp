@@ -25,13 +25,7 @@ void MainWindow::on_Button_ok_clicked()
     ui->lineEdit->setEnabled(false);
     ui->Button_ok->setEnabled(false);
     ui->lineEdit->setText("user");
-    bool bOk;
     QString name_people = ui->lineEdit->text();//QInputDialog::getText( 0, "Your name", "Enter your name:", QLineEdit::Normal, "user", &bOk);
-
-    //QString name_people = QInputDialog::getText( 0, "Your name", "Enter your name:", QLineEdit::Normal, "user", &bOk);
-   //qDebug()<<name_people;
-
-    //QString name_people = "user";
     CvCapture* capture = cvCaptureFromCAM(0);//cvCreateCameraCapture(CV_CAP_ANY); //cvCaptureFromCAM( 0 );
     assert( capture );
     IplImage* frame=0;
@@ -74,4 +68,10 @@ void MainWindow::on_Button_ok_clicked()
         destroyWindow("result");
         qDebug()<<"Database was created!";
     }
+}
+
+
+void MainWindow::open_image_in_lable(QImage img)
+{
+    ui->image_label->setPixmap(QPixmap::fromImage(img));
 }

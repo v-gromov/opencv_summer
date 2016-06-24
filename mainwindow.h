@@ -27,6 +27,7 @@
 #include <QThread>
 #include <QDesktopWidget>
 
+QImage convert_lpl_qimg(IplImage* frame);
 namespace Ui {
 class MainWindow;
 }
@@ -37,7 +38,8 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    void open_image_in_lable(QImage img);
+    void open_image_in_lable(IplImage* frame);
+
     ~MainWindow();
 
 private slots:
@@ -48,5 +50,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 };
+
+
 
 #endif // MAINWINDOW_H

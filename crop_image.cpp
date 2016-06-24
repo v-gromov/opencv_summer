@@ -15,27 +15,6 @@ using namespace std;
 QImage CropFace(QImage a, int left_x, int left_y, int right_x, int right_y, float offset_pct_1, float offset_pct_2, int dest_sz_x, int dest_sz_y);
 QImage ScaleRotateTranclate(QImage, float , double* , int , float);
 
-/*int main()
-{
-    QString name_img = "0.jpg";
-    QString name_save = "00.jpg";
-    QString folder = "/home/vgromov/tmp/resize_images/testing/1";
-
-    QImage img(folder + "/" + name_img);
-
-
-    CropFace(img, 252,364, 420,366, 0.3, 0.3, 200, 200);
-
-    /*QPixmap pixmap;
-    pixmap = pixmap.fromImage(img.scaled(img.width(),img.height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
-    QFile file(folder+"/"+name_save);
-    file.open(QIODevice::WriteOnly);
-    pixmap.save(&file, "jpg",100);
-    file.close();
-    return 0;
-}
-*/
-
 float Distance(double* p1, double* p2)
 {
     int dx = p2[0] - p1[0];
@@ -107,11 +86,6 @@ QImage CropFace(QImage a, int left_x, int left_y, int right_x, int right_y, floa
 
     QImage face;
     face = new1.copy((int)crop_xy[0], (int)crop_xy[1], (int)(crop_size[0]), (int)crop_size[1]);
-
-    /*QFile file("/home/vgromov/tmp/resize_images/testing/1/cropped_image.jpg");
-    file.open(QIODevice::WriteOnly);
-    face.save(&file, "jpg", 100);
-    file.close();*/
     return face;
 }
 

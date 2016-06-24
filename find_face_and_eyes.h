@@ -17,9 +17,9 @@ private:
     QVector <Point> coord_eyes;
 };
 
-face center_faces(QString image_name);
+face center_faces(IplImage *);
 
-void detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
+Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
                            CascadeClassifier& nestedCascade,
                            double scale, QVector <face> &find_faces);
 

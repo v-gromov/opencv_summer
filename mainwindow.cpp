@@ -1,11 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    thread.start(QThread::LowPriority);
 }
 
 MainWindow::~MainWindow()
@@ -26,13 +28,13 @@ void MainWindow::on_Button_ok_clicked()
     ui->Button_ok->setEnabled(false);
     QString name_people = ui->lineEdit->text();
     CvCapture* capture = cvCaptureFromCAM(0);
-    assert( capture );
+    assert(capture);
     IplImage* frame=0;
     if (!name_people.isEmpty())
     {
         QDir().mkdir(name_people);
         int numb_photo = 0;
-        while(numb_photo<=10)//запилить многопоточность. Пока цикл работает, уишка не обновляется
+        while(numb_photo<=3)//запилить многопоточность. Пока цикл работает, уишка не обновляется
         {
             // получаем кадр
             frame = cvQueryFrame(capture);
@@ -75,7 +77,6 @@ void MainWindow::on_Button_ok_clicked()
 void MainWindow::open_image_in_lable(IplImage* frame)
 {
     Mat img = cvarrToMat(frame);
-    //cv::resize(img, img, Size(512, 384), 0, 0, INTER_LINEAR);
     cv::cvtColor(img,img,CV_BGR2RGB); //Qt reads in RGB whereas CV in BGR
     QImage imdisplay((uchar*)img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
     ui->image_label->setPixmap(QPixmap::fromImage(imdisplay));//display the image in label that is created earlier
@@ -87,4 +88,28 @@ QImage convert_lpl_qimg(IplImage* frame)
     cv::cvtColor(img,img,CV_BGR2RGB); //Qt reads in RGB whereas CV in BGR
     QImage imdisplay((uchar*)img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
     return imdisplay;
+}
+
+workGUI::workGUI()
+{
+    value_if_cycle = 1;
+    qDebug()<<"start";
+}
+
+void workGUI::stop_sycle()
+{
+    value_if_cycle = 0;
+}
+
+workGUI::~workGUI()
+{
+    value_if_cycle = 0;
+    qDebug()<<"end";
+}
+
+void workGUI::run()
+{
+    value_if_cycle++;
+    qDebug()<<"sss"<<value_if_cycle;
+
 }

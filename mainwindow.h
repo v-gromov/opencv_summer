@@ -32,6 +32,21 @@ namespace Ui {
 class MainWindow;
 }
 
+class workGUI : public QThread
+{
+    Q_OBJECT
+    public:
+    workGUI();
+    ~workGUI();
+    void run();
+    void stop_sycle();
+    void setImage(QPixmap img);
+    QPixmap img;
+private:
+    int value_if_cycle;
+};
+
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -39,9 +54,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     void open_image_in_lable(IplImage* frame);
-
     ~MainWindow();
-
+    workGUI thread;
 private slots:
     void on_Button_create_database_clicked();
 
@@ -49,7 +63,9 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
 };
+
 
 
 

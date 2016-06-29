@@ -25,48 +25,46 @@
 #include <QDebug>
 #include <QLabel>
 #include <QThread>
-#include <QDesktopWidget>
-
-QImage convert_lpl_qimg(IplImage* frame);
-namespace Ui {
-class MainWindow;
-}
+//#include <QDesktopWidget>
 
 class workGUI : public QThread
 {
     Q_OBJECT
-    public:
-    workGUI();
-    ~workGUI();
-    void run();
-    void stop_sycle();
-    void setImage(QPixmap img);
-    QPixmap img;
+public:
+    void run()
+    {
+        exec();
+    };
+public slots:
+    void createDatabase(QString);
+signals:
+    void SignImage(QImage);
+
 private:
-    int value_if_cycle;
+    void sendImage(QImage img){emit SignImage(img);}
+    QImage convert_lpl_qimg(IplImage*);
 };
 
+
+
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     explicit MainWindow(QWidget *parent = 0);
-    void open_image_in_lable(IplImage* frame);
     ~MainWindow();
-    workGUI thread;
 private slots:
     void on_Button_create_database_clicked();
-
     void on_Button_ok_clicked();
-
+    void slotSetLabelImg(QImage);
+signals:
+    void signCreateDatabase(QString);
 private:
     Ui::MainWindow *ui;
-
 };
-
-
-
 
 #endif // MAINWINDOW_H

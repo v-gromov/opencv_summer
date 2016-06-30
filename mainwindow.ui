@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>853</width>
-    <height>527</height>
+    <width>1272</width>
+    <height>678</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="Button_create_database">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>30</y>
+      <x>20</x>
+      <y>490</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -35,8 +35,8 @@
    <widget class="QPushButton" name="Button_Find_face">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>140</y>
+      <x>490</x>
+      <y>500</y>
       <width>141</width>
       <height>51</height>
      </rect>
@@ -53,10 +53,10 @@
    <widget class="QLabel" name="image_label">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>30</y>
-      <width>341</width>
-      <height>251</height>
+      <x>620</x>
+      <y>70</y>
+      <width>581</width>
+      <height>351</height>
      </rect>
     </property>
     <property name="font">
@@ -80,8 +80,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>90</y>
+      <x>220</x>
+      <y>500</y>
       <width>181</width>
       <height>41</height>
      </rect>
@@ -101,8 +101,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>780</x>
-      <y>90</y>
+      <x>410</x>
+      <y>500</y>
       <width>51</width>
       <height>41</height>
      </rect>
@@ -113,14 +113,14 @@
      </font>
     </property>
     <property name="text">
-     <string>Ok</string>
+     <string>Go</string>
     </property>
    </widget>
    <widget class="QLabel" name="information_label">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>290</y>
+      <y>420</y>
       <width>291</width>
       <height>61</height>
      </rect>
@@ -134,13 +134,37 @@
      <string>Information</string>
     </property>
    </widget>
+   <widget class="QLabel" name="online_video_label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>50</y>
+      <width>551</width>
+      <height>371</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>ArrowCursor</cursorShape>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>Your face in here!</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>853</width>
+     <width>1272</width>
      <height>20</height>
     </rect>
    </property>

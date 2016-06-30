@@ -1,6 +1,17 @@
 #ifndef FIND_FACE_AND_EYES_H
 #define FIND_FACE_AND_EYES_H
+#include <iostream>
 #include "mainwindow.h"
+
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/video/tracking.hpp"
+#include <opencv/cv.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv/highgui.h>
+#include "opencv2/objdetect.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/videoio.hpp"
+
 using namespace std;
 using namespace cv;
 
@@ -17,10 +28,12 @@ private:
     QVector <Point> coord_eyes;
 };
 
-face center_faces(IplImage *);
+QVector <face> center_faces(IplImage *);
 
 Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
                            CascadeClassifier& nestedCascade,
                            double scale, QVector <face> &find_faces);
+QImage convert_lpl_qimg(IplImage*);
+IplImage convert_qimg_to_lpl(QImage );
 
 #endif // FIND_FACE_AND_EYES_H

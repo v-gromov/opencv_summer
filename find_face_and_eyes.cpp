@@ -1,9 +1,9 @@
 #include "find_face_and_eyes.h"
-face center_faces(IplImage *frame)
+QVector <face> center_faces(IplImage *frame)
 {
-    face null_face;
+    QVector <face> null_face;
     QVector <face> find_faces;
-    double scale = 0.3;//scale 0.4 is good
+    double scale = 0.1;//scale 0.4 is good
 
     bool case_value = 0;
     int number_of_true_face = -1;
@@ -30,7 +30,7 @@ face center_faces(IplImage *frame)
         }
         for(int i = 0; i < find_faces.size(); i++)
         {
-            if(find_faces[i].number_eyes()==2)
+            if(find_faces[i].number_eyes()>=1)
             {
                 case_value = 1;
                 number_of_true_face = i;
@@ -39,7 +39,7 @@ face center_faces(IplImage *frame)
         scale+=0.1;
     }
     if(number_of_true_face!=-1)
-        return find_faces[number_of_true_face];
+        return find_faces;
     return null_face;
 }
 
@@ -106,8 +106,6 @@ Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
             circle(img, center, radius, color, 3, 8, 0 );//ubrat
         }
         find_faces[i].set_coord_eyes(write_eyes_array);
-                //open_image_in_lable(img);
-        qDebug()<<"IM HERE";
     }
     return img;
 }
@@ -135,4 +133,12 @@ void face::set_coord_eyes(QVector<Point>  set)
 int face::number_eyes()
 {
     return coord_eyes.size();
+}
+
+QImage convert_lpl_qimg(IplImage* frame)
+{
+    Mat img = cvarrToMat(frame);
+    cv::cvtColor(img,img,CV_BGR2RGB); //Qt reads in RGB whereas CV in BGR
+    QImage imdisplay((uchar*)img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
+    return imdisplay;
 }

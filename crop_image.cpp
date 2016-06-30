@@ -72,7 +72,6 @@ QImage CropFace(QImage a, int left_x, int left_y, int right_x, int right_y, floa
     double reference = dest_sz_x - 2 * offset_h;
     double scale = (float)dist/reference;
     //поворот изображения
-    //image = ScaleRotateTranslate(image, center=eye_left, angle=rotation)
     QImage new1 = ScaleRotateTranclate(a, rotation, eye_left, 0, 0);
 
 

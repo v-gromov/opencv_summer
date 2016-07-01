@@ -1,9 +1,11 @@
 #include "find_face_and_eyes.h"
-QVector <face> center_faces(IplImage *frame)
+
+QVector <face> center_faces(QImage frame, QImage* ResultImg, float scale)
 {
     QVector <face> null_face;
     QVector <face> find_faces;
-    double scale = 0.1;//scale 0.4 is good
+   // double scale = 0.35;//scale 0.4 is good
+    qDebug()<<scale;
 
     bool case_value = 0;
     int number_of_true_face = -1;
@@ -20,14 +22,15 @@ QVector <face> center_faces(IplImage *frame)
         return null_face;
     }
 
-    while((scale<=0.5)&&(!case_value))
-    {
-        Mat image = cvarrToMat(frame);
+   // while((scale<=0.5)&&(!case_value))
+   // {
+        Mat image = qimage2mat(frame);
         if(image.empty()) cout << "Couldn't read image" << endl;
         if(!image.empty())
         {
-            detect_Face_and_eyes(image, cascade, nestedCascade, scale, find_faces);
+            *ResultImg = Mat2QImage(detect_Face_and_eyes(image, cascade, nestedCascade, scale, find_faces));
         }
+
         for(int i = 0; i < find_faces.size(); i++)
         {
             if(find_faces[i].number_eyes()>=1)
@@ -36,8 +39,7 @@ QVector <face> center_faces(IplImage *frame)
                 number_of_true_face = i;
             }
         }
-        scale+=0.1;
-    }
+   // }
     if(number_of_true_face!=-1)
         return find_faces;
     return null_face;
@@ -61,7 +63,7 @@ Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
     };
     //ubrat
     Mat gray, smallImg;
-    cvtColor( img, gray, COLOR_BGR2GRAY );
+    cvtColor( img, gray, COLOR_BGR2GRAY);
     double fx = 1 / scale;
     resize( gray, smallImg, Size(), fx, fx, INTER_LINEAR );//здесь проблемы
     equalizeHist( smallImg, smallImg );
@@ -141,4 +143,21 @@ QImage convert_lpl_qimg(IplImage* frame)
     cv::cvtColor(img,img,CV_BGR2RGB); //Qt reads in RGB whereas CV in BGR
     QImage imdisplay((uchar*)img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
     return imdisplay;
+}
+
+Mat qimage2mat(const QImage& qimage) {
+    cv::Mat mat = cv::Mat(qimage.height(), qimage.width(), CV_8UC3, (uchar*)qimage.bits(), qimage.bytesPerLine());
+    cv::Mat mat2 = cv::Mat(mat.rows, mat.cols, CV_8UC3 );
+    int from_to[] = { 0,0,  1,1,  2,2 };
+    cv::mixChannels( &mat, 1, &mat2, 1, from_to, 3 );
+    return mat2;
+}
+
+QImage Mat2QImage(const Mat &src) {
+    cv::Mat temp;
+    cvtColor(src, temp,CV_BGR2RGB);
+    QImage dest((uchar*) temp.data, temp.cols, temp.rows, temp.step, QImage::Format_RGB888);
+    QImage dest2(dest);
+    dest2.detach();
+    return dest2;
 }

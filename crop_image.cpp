@@ -33,7 +33,7 @@ QImage ScaleRotateTranclate(QImage aa, float angle, double* center_old, int cent
         return rotated_img;
     }
 
-       int nx = center_old[0], x = center_old[0];
+    int nx = center_old[0], x = center_old[0];
     int ny = center_old[1], y = center_old[1];
     float sx = 1.0, sy = 1.0;
     if(center_new!=0)

@@ -23,9 +23,12 @@ private slots:
     void on_Button_ok_clicked();
     void slotSetLabelImg(QImage);
     void slotSetLabelOnllineImg(QImage);
+    void on_horizontalScrollBar_sliderMoved(int);
+
 signals:
     void signCreateDatabase(QString);
     void signOnlineTransl();
+    void signSend_scale(int);
 private:
     Ui::MainWindow *ui;
 };

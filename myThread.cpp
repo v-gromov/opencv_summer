@@ -2,27 +2,20 @@
 
 void create_database::slot_createDB_start(QString name_people)
 {
-    /*CvCapture* capture = cvCaptureFromCAM(0);
-    assert(capture);*/
-    IplImage* frame=0;
+    /*while(1)
+    {
 
+    }*/
     if (!name_people.isEmpty())
     {
         QDir().mkdir(name_people);
         int numb_photo = 0;
         while(numb_photo<=10)
         {
-            // получаем кадр
-            //frame = cvQueryFrame(capture);
-            frame = lp_cvImage;
-            //emit sign_createDB_online_img(convert_lpl_qimg(frame));
-
-            QVector <face> position_face = center_faces(frame);
-            //qDebug()<<position_face.number_eyes();
-
-            QImage img = convert_lpl_qimg(frame);
-            emit sign_createDB_send_img(img);
-
+            QImage* res = new QImage;
+            QVector <face> position_face = center_faces(SendImage, res, scale);
+            QImage i = *res;
+            emit sign_createDB_send_img(i);
             /*if(position_face.number_eyes()==2)
             {
 
@@ -48,30 +41,49 @@ void create_database::slot_createDB_start(QString name_people)
                 const char* myChar = myString.c_str();
                 cvSaveImage(myChar, frame);*/
 
-            //    numb_photo++;
-            //}
-        }
+                //numb_photo++;
+            }
+        //}
         // освобождаем ресурсы
         //cvReleaseCapture( &capture );
         //cvDestroyWindow("capture");
-        qDebug()<<"Database was created!";
+       // qDebug()<<"Database was created!";
     }
+}
+
+create_database::create_database()
+{
+    scale = 0.35;
 }
 
 void online_translation::slot_online_translation()
 {
-    CvCapture* capture = cvCaptureFromCAM(0);
-    assert(capture);
+
     while(true){
     IplImage* frame = cvQueryFrame(capture);
     emit sign_img_translation(convert_lpl_qimg(frame));
-    emit sign_img_translation1(frame);
     }
+}
+
+online_translation::online_translation()
+{
+    capture = cvCaptureFromCAM(0);
+    assert(capture);
+}
+
+online_translation::~online_translation()
+{
     cvReleaseCapture( &capture );
     cvDestroyWindow("capture");
 }
 
-void create_database::slot_createDB_get_image(IplImage* img)
+void create_database::slot_set_scale(int val)
 {
-    lp_cvImage = img;
+    scale = val/100.;
+    qDebug()<<scale;
+}
+
+void create_database::slot_createDB_get_image(QImage img)
+{
+    SendImage = img;
 }

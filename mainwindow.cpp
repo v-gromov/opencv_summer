@@ -40,3 +40,9 @@ void MainWindow::slotSetLabelOnllineImg(QImage imdisplay)
 {
     ui->online_video_label->setPixmap(QPixmap::fromImage(imdisplay));
 }
+
+void MainWindow::on_horizontalScrollBar_sliderMoved(int position)
+{
+    ui->lcdNumber->display(position*0.01);
+    emit signSend_scale(position);
+}

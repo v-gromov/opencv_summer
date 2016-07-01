@@ -21,9 +21,9 @@ int main(int argc, char *argv[])
     QObject::connect(&w, SIGNAL(signOnlineTransl()), &obj_online, SLOT(slot_online_translation()));
     QObject::connect(&obj_online, SIGNAL(sign_img_translation(QImage)), &w, SLOT(slotSetLabelOnllineImg(QImage)));
     //передача видеокадров в класс создания бд
-    QObject::connect(&obj_online, SIGNAL(sign_img_translation1(IplImage*)), &obj_create_DB, SLOT(slot_createDB_get_image(IplImage*)));
-
-
+    QObject::connect(&obj_online, SIGNAL(sign_img_translation(QImage)), &obj_create_DB, SLOT(slot_createDB_get_image(QImage)));
+    //передача sclare с скрол бара
+    QObject::connect(&w, SIGNAL(signSend_scale(int)), &obj_create_DB, SLOT(slot_set_scale(int)), Qt::DirectConnection);
     thread_two.start();
     thread_one.start();
     w.show();

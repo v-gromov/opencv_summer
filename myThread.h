@@ -30,11 +30,16 @@ public slots:
     void slot_createDB_get_image(QImage);
     void slot_createDB_start(QString);
     void slot_set_scale(int);
+    void slot_save_image();
 
 signals:
-    void sign_createDB_send_img(QImage);// отправка корректированой картинки
+    void sign_createDB_send_img(QImage);// отправка картинки с кругами
+    void sign_createDB_send_crop_img(QImage);//отправка кропленой картинки
 private:
     QImage SendImage;
+    QImage SendImage_for_crop;
+    bool save_value;
+
     std::atomic<float> scale;
 };
 

@@ -20,12 +20,16 @@ class face
 public:
     Point get_coord_face();
     QVector<Point> get_coord_eyes();
+    QVector<int> get_radius_eyes();
     void set_coord_face(Point);
     void set_coord_eyes(QVector<Point>);
+    void set_radius_eyes(QVector<int>);
     int number_eyes();
 private:
     Point coord_face;
     QVector <Point> coord_eyes;
+    QVector <int> radius_eyes;
+
 };
 
 QVector <face> center_faces(QImage, QImage* ResultImg, float);

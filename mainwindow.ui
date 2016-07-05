@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1272</width>
-    <height>678</height>
+    <width>1437</width>
+    <height>932</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,8 +53,8 @@
    <widget class="QLabel" name="image_label">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>70</y>
+      <x>180</x>
+      <y>80</y>
       <width>581</width>
       <height>351</height>
      </rect>
@@ -134,13 +134,36 @@
      <string>Information</string>
     </property>
    </widget>
-   <widget class="QLabel" name="online_video_label">
+   <widget class="QScrollBar" name="horizontalScrollBar">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>349</x>
+      <y>560</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="lcdNumber">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>560</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="image_crop_label">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
       <y>50</y>
-      <width>551</width>
-      <height>371</height>
+      <width>591</width>
+      <height>401</height>
      </rect>
     </property>
     <property name="font">
@@ -158,27 +181,22 @@
      <string>Your face in here!</string>
     </property>
    </widget>
-   <widget class="QScrollBar" name="horizontalScrollBar">
+   <widget class="QPushButton" name="Button_save_face">
     <property name="geometry">
      <rect>
-      <x>779</x>
-      <y>500</y>
-      <width>201</width>
-      <height>31</height>
+      <x>960</x>
+      <y>490</y>
+      <width>141</width>
+      <height>51</height>
      </rect>
     </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
     </property>
-   </widget>
-   <widget class="QLCDNumber" name="lcdNumber">
-    <property name="geometry">
-     <rect>
-      <x>990</x>
-      <y>500</y>
-      <width>71</width>
-      <height>31</height>
-     </rect>
+    <property name="text">
+     <string>Save</string>
     </property>
    </widget>
   </widget>
@@ -187,7 +205,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1272</width>
+     <width>1437</width>
      <height>20</height>
     </rect>
    </property>

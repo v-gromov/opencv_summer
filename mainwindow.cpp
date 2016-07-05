@@ -54,14 +54,12 @@ void MainWindow::on_horizontalScrollBar_sliderMoved(int position)
 
 void MainWindow::on_Button_save_face_clicked()
 {
-    qDebug()<<"LOL";
     emit signSendSave();
 }
 
 
-/*
-Оно просто транслирует видеопоток
+//Оно просто транслирует видеопоток
 void MainWindow::slotSetLabelOnllineImg(QImage imdisplay)
 {
     ui->online_video_label->setPixmap(QPixmap::fromImage(imdisplay));
-}*/
+}

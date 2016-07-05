@@ -2,10 +2,9 @@
 
 QVector <face> center_faces(QImage frame, QImage* ResultImg, float scale)
 {
+    //scale 0.4 is good
     QVector <face> null_face;
     QVector <face> find_faces;
-    // double scale = 0.35;//scale 0.4 is good
-
     int number_of_true_face = -1;
 
     CascadeClassifier cascade, nestedCascade;
@@ -56,7 +55,6 @@ Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
         Scalar(0,0,255),
         Scalar(255,0,255)
     };
-    //ubrat
     Mat gray, smallImg;
     cvtColor( img, gray, COLOR_BGR2GRAY);
     double fx = 1 / scale;
@@ -68,8 +66,8 @@ Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
                               Size(30, 30) );
     for ( size_t i = 0; i < faces.size(); i++ )
     {
-        Scalar color = colors[i%8];//ubrat
-        int radius;//ubrat
+        Scalar color = colors[i%8];
+        int radius;
 
         Rect r = faces[i];
         Mat smallImgROI;
@@ -100,10 +98,10 @@ Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
             center.y = cvRound((r.y + nr.y + nr.height*0.5)*scale);
             write_eyes_array.push_back(center);
 
-            radius = cvRound((nr.width + nr.height)*0.25*scale);//ubrat
+            radius = cvRound((nr.width + nr.height)*0.25*scale);
             write_radius_eyes_array.push_back(radius);
 
-            circle(img, center, radius, color, 3, 8, 0 );//ubrat
+            circle(img, center, radius, color, 3, 8, 0 );
         }
         find_faces[i].set_coord_eyes(write_eyes_array);
         find_faces[i].set_radius_eyes(write_radius_eyes_array);

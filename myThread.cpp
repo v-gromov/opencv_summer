@@ -15,14 +15,22 @@ void create_database::slot_createDB_start(QString name_people)
                 pixmap = pixmap.fromImage(SendImage_for_crop.scaled(SendImage_for_crop.width(),SendImage_for_crop.height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
                 QString tmp2;
                 tmp2.setNum(numb_photo);
-                QFile file("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/"+name_people+"/image_crop"+tmp2+".jpg");
+                QString path_to_file = "/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/"+name_people+"/image_crop"+tmp2+".jpg"+";" + name_people;
+                //сохраним файл
+                QFile file(path_to_file);
                 file.open(QIODevice::WriteOnly);
                 pixmap.save(&file, "jpg",100);
                 file.close();
+                //добавим сведения с CSV файл
+                QFile fileCSV("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/database.csv");
+                fileCSV.open(QIODevice::Append | QIODevice::Text);
+                QTextStream writeStream(&fileCSV); // Создаем объект класса QTextStream
+                writeStream <<path_to_file + "\n"; // Посылаем строку в поток для записи
+                fileCSV.close(); // Закрываем файл
+
                 save_value = false;
                 numb_photo++;
             }
-
             QImage* res = new QImage;
             QVector <face> position_face = center_faces(SendImage, res, scale);
             QImage cropImg = SendImage;
@@ -36,32 +44,9 @@ void create_database::slot_createDB_start(QString name_people)
                 {
                     SendImage_for_crop = CropFace(cropImg, position_face[i].get_coord_eyes().at(0).x,position_face[i].get_coord_eyes().at(0).y, position_face[i].get_coord_eyes().at(1).x, position_face[i].get_coord_eyes().at(1).y, 0.3, 0.3, 200, 200);
                     sign_createDB_send_crop_img(SendImage_for_crop);
-                    //QPixmap pixmap;
-                    //pixmap = pixmap.fromImage(crop.scaled(crop.width(),crop.height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
                 }
-
-                /*
-                QFile file("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/"+name_people+"/image_crop"+tmp2+".jpg");
-                file.open(QIODevice::WriteOnly);
-                pixmap.save(&file, "jpg",100);
-                file.close();
-                */
-                //потом сохранить фото
-                /*QString tmp2;
-                tmp2.setNum(numb_photo);
-                QString tmp = "/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/"+name_people+"/image"+tmp2+".jpg";
-                std::string myString = tmp.toStdString();
-                const char* myChar = myString.c_str();
-                cvSaveImage(myChar, frame);*/
-
-                //numb_photo++;
             }
         }
-        //}
-        // освобождаем ресурсы
-        //cvReleaseCapture( &capture );
-        //cvDestroyWindow("capture");
-        // qDebug()<<"Database was created!";
     }
 }
 
@@ -98,7 +83,6 @@ void create_database::slot_set_scale(int val)
         scale = val/100.;
     else
         scale = 0.1;
-    qDebug()<<scale;
 }
 
 void create_database::slot_createDB_get_image(QImage img)

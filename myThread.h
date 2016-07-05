@@ -1,18 +1,16 @@
 #ifndef THREAD_ONE_H
 #define THREAD_ONE_H
-#include "mainwindow.h"
-#include "find_face_and_eyes.h"
-#include "crop_image.h"
-#include "highgui.h"
 
 #include <QObject>
 #include <QThread>
-
 #include <QFile>
 #include <QFileDialog>
 #include <atomic>
 
-#include <opencv/cv.h>
+#include "find_face_and_eyes.h"
+#include "crop_image.h"
+#include "detecting_face.h"
+
 
 class myThread: public QThread
 {
@@ -55,7 +53,18 @@ signals:
     void sign_img_translation(QImage);
 private:
     CvCapture* capture;
+};
 
+
+class recognition_face: public QObject
+{
+    Q_OBJECT
+/*public slots:
+    void slot_online_translation();
+signals:
+    void sign_img_translation(QImage);*/
+private:
+    face_model detect_object;
 };
 
 #endif // THREAD_ONE_H

@@ -1,15 +1,5 @@
 #include "crop_image.h"
 
-#include <QFile>
-#include <QImage>
-#include <QPixmap>
-#include <QApplication>
-#include <QPainter>
-#include <math.h>
-#include <QDebug>
-#include <QLabel>
-
-#include <iostream>
 using namespace std;
 
 QImage CropFace(QImage a, int left_x, int left_y, int right_x, int right_y, float offset_pct_1, float offset_pct_2, int dest_sz_x, int dest_sz_y);

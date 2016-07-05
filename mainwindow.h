@@ -1,12 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+#include "myThread.h"
 
 #include <QApplication>
 #include <QMainWindow>
 #include <QString>
 #include <QDebug>
-
-#include "myThread.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,7 +21,7 @@ private slots:
     void on_Button_create_database_clicked();
     void on_Button_ok_clicked();
     void slotSetLabelImg(QImage);
-    //void slotSetLabelOnllineImg(QImage);
+    void slotSetLabelOnllineImg(QImage);
     void slotSetLableCropImg(QImage);
     void on_horizontalScrollBar_sliderMoved(int);
 

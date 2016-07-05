@@ -17,12 +17,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     find_face_and_eyes.cpp \
     crop_image.cpp \
-    myThread.cpp
+    myThread.cpp \
+    detecting_face.cpp
 
 HEADERS  += mainwindow.h \
     find_face_and_eyes.h \
     crop_image.h \
-    myThread.h
+    myThread.h \
+    detecting_face.h
 
 FORMS    += mainwindow.ui
 

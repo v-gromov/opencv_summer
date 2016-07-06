@@ -20,6 +20,7 @@ QVector <face> center_faces(QImage frame, QImage* ResultImg, float scale)
     }
 
     Mat image = qimage2mat(frame);
+    // imshow( "Display windowSS", image);
     if(image.empty()) cout << "Couldn't read image" << endl;
     if(!image.empty())
     {
@@ -154,11 +155,16 @@ QImage convert_lpl_qimg(IplImage* frame)
 }
 
 Mat qimage2mat(const QImage& qimage) {
-    cv::Mat mat = cv::Mat(qimage.height(), qimage.width(), CV_8UC3, (uchar*)qimage.bits(), qimage.bytesPerLine());
+    qDebug() << "Image format: " << qimage.format();
+    cv::Mat tmp(qimage.height(),qimage.width(),CV_8UC3,(uchar*)qimage.bits(),qimage.bytesPerLine());
+    cv::Mat result; // deep copy just in case (my lack of knowledge with open cv)
+    cvtColor(tmp, result,CV_BGR2RGB);
+    return result;
+    /*cv::Mat mat = cv::Mat(qimage.height(), qimage.width(), CV_8UC3, (uchar*)qimage.bits(), qimage.bytesPerLine());
     cv::Mat mat2 = cv::Mat(mat.rows, mat.cols, CV_8UC3 );
     int from_to[] = { 0,0,  1,1,  2,2 };
     cv::mixChannels( &mat, 1, &mat2, 1, from_to, 3 );
-    return mat2;
+    return mat2;*/
 }
 
 QImage Mat2QImage(const Mat &src) {

@@ -9,13 +9,16 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
 
-    myThread thread_one;
-    myThread thread_two;
+    myThread thread_one;//для create DB
+    myThread thread_two;//для online трансляции
+    myThread thread_three; //для распознавания лица
     create_database obj_create_DB;
     online_translation obj_online;
+    recognition_face obj_recogn;
 
     obj_create_DB.moveToThread(&thread_one);
     obj_online.moveToThread(&thread_two);
+    obj_recogn.moveToThread(&thread_three);
 
     //создание бд
     QObject::connect(&w, SIGNAL(signCreateDatabase(QString)), &obj_create_DB, SLOT(slot_createDB_start(QString)));
@@ -31,9 +34,12 @@ int main(int argc, char *argv[])
     QObject::connect(&obj_create_DB, SIGNAL(sign_createDB_send_crop_img(QImage)), &w, SLOT(slotSetLableCropImg(QImage)));
     //передача сигнала о сохранении файла
     QObject::connect(&w, SIGNAL(signSendSave()), &obj_create_DB, SLOT(slot_save_image()), Qt::DirectConnection);
-
+    //поиск лиц в recogn_face
+    QObject::connect(&obj_create_DB, SIGNAL(sign_createDB_send_crop_img(QImage)), &obj_recogn, SLOT(slot_recogn_face_detect(QImage)));
     thread_two.start();
     thread_one.start();
+    thread_three.start();
+
     w.show();
     return a.exec();
 }

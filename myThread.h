@@ -1,16 +1,15 @@
 #ifndef THREAD_ONE_H
 #define THREAD_ONE_H
 
+#include "find_face_and_eyes.h"
+#include "crop_image.h"
+#include "detecting_face.h"
+
 #include <QObject>
 #include <QThread>
 #include <QFile>
 #include <QFileDialog>
 #include <atomic>
-
-#include "find_face_and_eyes.h"
-#include "crop_image.h"
-#include "detecting_face.h"
-
 
 class myThread: public QThread
 {
@@ -24,6 +23,7 @@ class create_database: public QObject
     Q_OBJECT
 public:
     create_database();
+    void find_face();
 public slots:
     void slot_createDB_get_image(QImage);
     void slot_createDB_start(QString);
@@ -59,10 +59,8 @@ private:
 class recognition_face: public QObject
 {
     Q_OBJECT
-/*public slots:
-    void slot_online_translation();
-signals:
-    void sign_img_translation(QImage);*/
+public slots:
+    void slot_recogn_face_detect(QImage);
 private:
     face_model detect_object;
 };

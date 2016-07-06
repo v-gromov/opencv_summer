@@ -1,8 +1,17 @@
 #include "detecting_face.h"
+#include "opencv2/face.hpp"
+#include <QDebug>
+using namespace cv::face;
 
-int face_model:: get_numb_people(QImage qImg)
+Ptr <BasicFaceRecognizer> model;
+
+int face_model:: get_numb_people(Mat Img)
 {
-    return model->predict(qimage2mat(qImg));
+    Size size(92,112);//the dst image size,e.g.100x100
+    Mat dst;//dst image
+    Mat src = Img;//src image
+    resize(src,dst,size);//resize image
+    return 1;//model->predict(dst);
 }
 
 void face_model::read_csv(const string& filename, vector<Mat>& images, vector<int>& labels)
@@ -60,14 +69,5 @@ Mat face_model::norm_0_255(InputArray _src) {
         break;
     }
     return dst;
-}
-
-//Дублируется говнокод. Надо правильно подцепить find_face.h
-Mat face_model::qimage2mat(const QImage& qimage) {
-    cv::Mat mat = cv::Mat(qimage.height(), qimage.width(), CV_8UC3, (uchar*)qimage.bits(), qimage.bytesPerLine());
-    cv::Mat mat2 = cv::Mat(mat.rows, mat.cols, CV_8UC3 );
-    int from_to[] = { 0,0,  1,1,  2,2 };
-    cv::mixChannels( &mat, 1, &mat2, 1, from_to, 3 );
-    return mat2;
 }
 

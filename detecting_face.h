@@ -1,26 +1,24 @@
 #ifndef DETECTING_FACE_H
 #define DETECTING_FACE_H
 
-#include "opencv2/face.hpp"
-
-//#include "opencv2"
-#include <QString>
-#include <QImage>
-
+#include "opencv2/opencv.hpp"
 using namespace cv;
-//using namespace cv::face;
+
+#include <string.h>
+#include <vector>
 using namespace std;
+
+#include <fstream>
+#include <sstream>
 
 class face_model
 {
 public:
     face_model();
-    int get_numb_people(QImage);
+    int get_numb_people(Mat);
 private:
     void read_csv(const string&, vector<Mat>&, vector<int>&);
     Mat norm_0_255(InputArray);
-    Ptr <BasicFaceRecognizer> model;
-    Mat qimage2mat(const QImage& );
 };
 
 #endif // DETECTING_FACE_H

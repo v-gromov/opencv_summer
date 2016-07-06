@@ -1,5 +1,6 @@
 #include "myThread.h"
-
+#include <QLabel>
+#include <QPixmap>
 void create_database::slot_createDB_start(QString name_people)
 {
     if (!name_people.isEmpty())
@@ -10,7 +11,6 @@ void create_database::slot_createDB_start(QString name_people)
         {
             if((!SendImage.isNull())&&(save_value))
             {
-                qDebug()<<"sssddsad";
                 QPixmap pixmap;
                 pixmap = pixmap.fromImage(SendImage_for_crop.scaled(SendImage_for_crop.width(),SendImage_for_crop.height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
                 QString tmp2;
@@ -31,23 +31,36 @@ void create_database::slot_createDB_start(QString name_people)
                 save_value = false;
                 numb_photo++;
             }
-            QImage* res = new QImage;
-            QVector <face> position_face = center_faces(SendImage, res, scale);
-            QImage cropImg = SendImage;
-
-            QImage img = *res;
-            emit sign_createDB_send_img(img);
-            for(int i = 0; i < position_face.size(); i++)
-            {
-
-                if((position_face[i].number_eyes()==2)&&(position_face[i].get_radius_eyes()[0]>=20)&&(position_face[i].get_radius_eyes()[1]>=20))
-                {
-                    SendImage_for_crop = CropFace(cropImg, position_face[i].get_coord_eyes().at(0).x,position_face[i].get_coord_eyes().at(0).y, position_face[i].get_coord_eyes().at(1).x, position_face[i].get_coord_eyes().at(1).y, 0.3, 0.3, 200, 200);
-                    sign_createDB_send_crop_img(SendImage_for_crop);
-                }
-            }
+            find_face();
         }
     }
+}
+
+void create_database::find_face()
+{
+    QImage* res = new QImage;
+    QVector <face> position_face = center_faces(SendImage, res, scale);
+    QImage cropImg = SendImage;
+
+    QImage img = *res;
+    emit sign_createDB_send_img(img);
+    for(int i = 0; i < position_face.size(); i++)
+    {
+
+        if((position_face[i].number_eyes()==2)&&(position_face[i].get_radius_eyes()[0]>=20)&&(position_face[i].get_radius_eyes()[1]>=20))
+        {
+            SendImage_for_crop = CropFace(cropImg, position_face[i].get_coord_eyes().at(0).x,position_face[i].get_coord_eyes().at(0).y, position_face[i].get_coord_eyes().at(1).x, position_face[i].get_coord_eyes().at(1).y, 0.3, 0.3, 200, 200);
+            sign_createDB_send_crop_img(SendImage_for_crop);
+        }
+    }
+}
+
+void recognition_face::slot_recogn_face_detect(QImage imgForDetect)
+{
+    Mat i = qimage2mat(imgForDetect);
+    imshow( "Display window", i);
+    int numb = detect_object.get_numb_people(i);
+    qDebug()<<"Numb people: "<<numb;
 }
 
 create_database::create_database()

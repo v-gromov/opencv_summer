@@ -20,7 +20,6 @@ QVector <face> center_faces(QImage frame, QImage* ResultImg, float scale)
     }
 
     Mat image = qimage2mat(frame);
-    // imshow( "Display windowSS", image);
     if(image.empty()) cout << "Couldn't read image" << endl;
     if(!image.empty())
     {
@@ -59,7 +58,7 @@ Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
     Mat gray, smallImg;
     cvtColor( img, gray, COLOR_BGR2GRAY);
     double fx = 1 / scale;
-    resize( gray, smallImg, Size(), fx, fx, INTER_LINEAR );//здесь проблемы
+    resize( gray, smallImg, Size(), fx, fx, INTER_LINEAR );
     equalizeHist( smallImg, smallImg );
     cascade.detectMultiScale( smallImg, faces,
                               1.1, 2, 0
@@ -154,8 +153,9 @@ QImage convert_lpl_qimg(IplImage* frame)
     return imdisplay;
 }
 
-Mat qimage2mat(const QImage& qimage) {
-    qDebug() << "Image format: " << qimage.format();
+Mat qimage2mat(QImage& qimage) {
+    //qimage.toPixelFormat(QImage::Format_RGB888);
+    //qDebug() << "Convert-Image format: " << qimage.format();
     cv::Mat tmp(qimage.height(),qimage.width(),CV_8UC3,(uchar*)qimage.bits(),qimage.bytesPerLine());
     cv::Mat result; // deep copy just in case (my lack of knowledge with open cv)
     cvtColor(tmp, result,CV_BGR2RGB);

@@ -36,7 +36,7 @@ Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
                            double scale, QVector <face> &find_faces);
 QImage convert_lpl_qimg(IplImage*);
 IplImage convert_qimg_to_lpl(QImage );
-Mat qimage2mat(const QImage& qimage);
+Mat qimage2mat(QImage& qimage);
 QImage Mat2QImage(cv::Mat const& src);
 
 #endif // FIND_FACE_AND_EYES_H

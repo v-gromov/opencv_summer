@@ -22,7 +22,6 @@ QImage ScaleRotateTranclate(QImage aa, float angle, double* center_old, int cent
         rotated_img = aa.transformed(rotating);//вращаем все изображение
         return rotated_img;
     }
-
     int nx = center_old[0], x = center_old[0];
     int ny = center_old[1], y = center_old[1];
     float sx = 1.0, sy = 1.0;
@@ -41,7 +40,16 @@ QImage ScaleRotateTranclate(QImage aa, float angle, double* center_old, int cent
     QTransform transform_img;
     transform_img.setMatrix(a, b, c, d, e, f, 0, 0, 1);
     aa = aa.transformed(transform_img.toAffine());
-    return aa;
+    //Есть траблы с форматор QImage. Ниже приведен конверт с формата №6 в формат №13
+    QImage conv_img(aa.width(), aa.height(),QImage::Format_RGB888);
+    conv_img.fill(QColor(Qt::white).rgb());
+
+    for (int x = 0; x < aa.width(); ++x) {
+        for (int y = 0; y < aa.height(); ++y) {
+            conv_img.setPixel(x, y, aa.pixel(x, y));
+        }
+    }
+    return conv_img;
 }
 
 
@@ -63,7 +71,6 @@ QImage CropFace(QImage a, int left_x, int left_y, int right_x, int right_y, floa
     double scale = (float)dist/reference;
     //поворот изображения
     QImage new1 = ScaleRotateTranclate(a, rotation, eye_left, 0, 0);
-
 
     double crop_xy[2];
     crop_xy[0] = eye_left[0] - scale*offset_h;

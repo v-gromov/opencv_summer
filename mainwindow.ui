@@ -162,8 +162,8 @@
      <rect>
       <x>670</x>
       <y>480</y>
-      <width>251</width>
-      <height>241</height>
+      <width>501</width>
+      <height>401</height>
      </rect>
     </property>
     <property name="font">
@@ -184,8 +184,8 @@
    <widget class="QPushButton" name="Button_save_face">
     <property name="geometry">
      <rect>
-      <x>960</x>
-      <y>490</y>
+      <x>20</x>
+      <y>550</y>
       <width>141</width>
       <height>51</height>
      </rect>

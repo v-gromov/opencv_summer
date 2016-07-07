@@ -1,5 +1,6 @@
 #include "detecting_face.h"
 #include "opencv2/face.hpp"
+#include "opencv2/core/core.hpp"
 #include <QDebug>
 using namespace cv::face;
 
@@ -7,10 +8,36 @@ Ptr <BasicFaceRecognizer> model;
 
 int face_model:: get_numb_people(Mat Img)
 {
-    Size size(92,112);//the dst image size,e.g.100x100
-    Mat dst;//dst image
+    Size ImgSize = Img.size();
     Mat src = Img;//src image
-    resize(src,dst,size);//resize image
+    Mat dst;
+    Mat dst2;
+    double sclareOX = 92./ImgSize.width;
+    double sclareOY = 112./ImgSize.height;
+    if(sclareOX<sclareOY)//значит больше ширина и мы уменьшаем до нужной ширины пропорционально
+    {
+        resize(src,dst,Size(0, 0), 92./ImgSize.width, 92./ImgSize.width, INTER_LINEAR );//resize image
+
+        int diff = (112 - dst.size().height)/2;
+        int diff2 = dst.size().height - diff;
+        qDebug()<<diff;
+        qDebug()<<diff2;
+
+        Rect reg(0, diff, 92, diff2);
+        dst(reg).copyTo(dst2);
+    }
+    else
+    {
+        //resize(src,dst,Size(0, 112));//resize image
+        resize(src,dst,Size(0, 0), 112./ImgSize.height, 112./ImgSize.height, INTER_LINEAR );//resize image
+    }
+    //Mat dst1(dst);
+    //Size size(92,112);//the dst image size,e.g.92x112
+    //resize(src,dst,size);//resize image
+    imshow( "Display window", dst2);
+
+    //to nado snizu
+    //sscvtColor(dst, dst,  CV_RGB2GRAY);//Выставляем нужный колор
     return 1;//model->predict(dst);
 }
 

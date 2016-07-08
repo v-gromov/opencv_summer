@@ -22,11 +22,14 @@ private slots:
     void on_Button_create_database_clicked();
     void on_Button_ok_clicked();
     void slotSetLabelImg(QImage);
-    void slotSetLabelOnllineImg(QImage);
+    //void slotSetLabelOnllineImg(QImage);
     void slotSetLableCropImg(QImage);
     void on_horizontalScrollBar_sliderMoved(int);
+    void slotPrintNumbPeople(int);
 
     void on_Button_save_face_clicked();
+
+    void on_Button_Find_face_clicked();
 
 signals:
     void signCreateDatabase(QString);

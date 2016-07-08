@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>490</y>
+      <y>520</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -35,8 +35,8 @@
    <widget class="QPushButton" name="Button_Find_face">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>500</y>
+      <x>480</x>
+      <y>520</y>
       <width>141</width>
       <height>51</height>
      </rect>
@@ -53,10 +53,10 @@
    <widget class="QLabel" name="image_label">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>80</y>
-      <width>581</width>
-      <height>351</height>
+      <x>30</x>
+      <y>40</y>
+      <width>791</width>
+      <height>471</height>
      </rect>
     </property>
     <property name="font">
@@ -71,7 +71,7 @@
      <bool>false</bool>
     </property>
     <property name="text">
-     <string>Your face in here!</string>
+     <string>Detecting eyes</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit">
@@ -81,7 +81,7 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>500</y>
+      <y>530</y>
       <width>181</width>
       <height>41</height>
      </rect>
@@ -102,7 +102,7 @@
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>500</y>
+      <y>530</y>
       <width>51</width>
       <height>41</height>
      </rect>
@@ -116,29 +116,11 @@
      <string>Go</string>
     </property>
    </widget>
-   <widget class="QLabel" name="information_label">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>420</y>
-      <width>291</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Information</string>
-    </property>
-   </widget>
    <widget class="QScrollBar" name="horizontalScrollBar">
     <property name="geometry">
      <rect>
-      <x>349</x>
-      <y>560</y>
+      <x>190</x>
+      <y>590</y>
       <width>201</width>
       <height>31</height>
      </rect>
@@ -150,8 +132,8 @@
    <widget class="QLCDNumber" name="lcdNumber">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>560</y>
+      <x>400</x>
+      <y>590</y>
       <width>71</width>
       <height>31</height>
      </rect>
@@ -160,10 +142,10 @@
    <widget class="QLabel" name="image_crop_label">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>480</y>
-      <width>501</width>
-      <height>401</height>
+      <x>750</x>
+      <y>270</y>
+      <width>251</width>
+      <height>221</height>
      </rect>
     </property>
     <property name="font">
@@ -178,14 +160,14 @@
      <bool>false</bool>
     </property>
     <property name="text">
-     <string>Your face in here!</string>
+     <string>Crop face</string>
     </property>
    </widget>
    <widget class="QPushButton" name="Button_save_face">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>550</y>
+      <y>580</y>
       <width>141</width>
       <height>51</height>
      </rect>
@@ -199,13 +181,13 @@
      <string>Save</string>
     </property>
    </widget>
-   <widget class="QLabel" name="online_video_label">
+   <widget class="QLabel" name="Infolabel">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>80</y>
-      <width>611</width>
-      <height>391</height>
+      <x>760</x>
+      <y>560</y>
+      <width>261</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
@@ -213,14 +195,8 @@
       <pointsize>14</pointsize>
      </font>
     </property>
-    <property name="cursor">
-     <cursorShape>ArrowCursor</cursorShape>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
     <property name="text">
-     <string>Your face in here!</string>
+     <string>Information</string>
     </property>
    </widget>
   </widget>

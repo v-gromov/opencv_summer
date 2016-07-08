@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     QObject::connect(&obj_create_DB, SIGNAL(sign_createDB_send_img(QImage)), &w, SLOT(slotSetLabelImg(QImage)));
     //отображение видеопотока
     QObject::connect(&w, SIGNAL(signOnlineTransl()), &obj_online, SLOT(slot_online_translation()));
-    QObject::connect(&obj_online, SIGNAL(sign_img_translation(QImage)), &w, SLOT(slotSetLabelOnllineImg(QImage)));
+    //QObject::connect(&obj_online, SIGNAL(sign_img_translation(QImage)), &w, SLOT(slotSetLabelOnllineImg(QImage)));
     //передача видеокадров в класс создания бд
     QObject::connect(&obj_online, SIGNAL(sign_img_translation(QImage)), &obj_create_DB, SLOT(slot_createDB_get_image(QImage)));
     //передача sclare с скрол бара
@@ -36,6 +36,10 @@ int main(int argc, char *argv[])
     QObject::connect(&w, SIGNAL(signSendSave()), &obj_create_DB, SLOT(slot_save_image()), Qt::DirectConnection);
     //поиск лиц в recogn_face
     QObject::connect(&obj_create_DB, SIGNAL(sign_createDB_send_crop_img(QImage)), &obj_recogn, SLOT(slot_recogn_face_detect(QImage)));
+    //Получение номера обнаруженного человека
+    QObject::connect(&obj_recogn, SIGNAL(sign_getNumberPeople(int)), &w, SLOT(slotPrintNumbPeople(int)));
+    //slotPrintNumbPeople
+    QObject::connect(&obj_online, SIGNAL(sign_img_translation(QImage)), &obj_recogn, SLOT(slot_recogn_face_detect(QImage)));
     thread_two.start();
     thread_one.start();
     thread_three.start();

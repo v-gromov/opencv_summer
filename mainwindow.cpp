@@ -59,7 +59,19 @@ void MainWindow::on_Button_save_face_clicked()
 
 
 //Оно просто транслирует видеопоток
-void MainWindow::slotSetLabelOnllineImg(QImage imdisplay)
+/*void MainWindow::slotSetLabelOnllineImg(QImage imdisplay)
 {
     ui->online_video_label->setPixmap(QPixmap::fromImage(imdisplay));
+}*/
+
+void MainWindow::slotPrintNumbPeople(int numb)
+{
+    QString numbstr;
+    numbstr.setNum(numb);
+    ui->Infolabel->setText(numbstr);
+}
+
+void MainWindow::on_Button_Find_face_clicked()
+{
+    emit signOnlineTransl();
 }

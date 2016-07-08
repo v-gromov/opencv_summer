@@ -63,7 +63,7 @@ void recognition_face::slot_recogn_face_detect(QImage imgForDetect)
 {
     Mat i = qimage2mat(imgForDetect);
     int numb = detect_object.get_numb_people(i);
-    qDebug()<<"Numb people: "<<numb;
+    emit sign_getNumberPeople(numb);
 }
 
 create_database::create_database()

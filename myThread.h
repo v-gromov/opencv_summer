@@ -61,6 +61,8 @@ private:
 class recognition_face: public QObject
 {
     Q_OBJECT
+signals:
+    void sign_getNumberPeople(int);
 public slots:
     void slot_recogn_face_detect(QImage);
 private:

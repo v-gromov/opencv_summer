@@ -11,17 +11,21 @@ void create_database::slot_createDB_start(QString name_people)
         {
             if((!SendImage.isNull())&&(save_value))
             {
+                Mat fordb = img_for_database(qimage2mat(SendImage_for_crop));
+                cvtColor(fordb, fordb,  CV_RGB2BGR);//Выставляем нужный колор
+                SendImage_for_crop = Mat2QImage(fordb);
                 QPixmap pixmap;
                 pixmap = pixmap.fromImage(SendImage_for_crop.scaled(SendImage_for_crop.width(),SendImage_for_crop.height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
                 QString tmp2;
                 tmp2.setNum(numb_photo);
-                QString path_to_file = "/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/"+name_people+"/image_crop"+tmp2+".jpg"+";" + name_people;
+                QString path_to_file = "/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/"+name_people+"/image_crop"+tmp2+".jpg";
                 //сохраним файл
                 QFile file(path_to_file);
                 file.open(QIODevice::WriteOnly);
                 pixmap.save(&file, "jpg",100);
                 file.close();
                 //добавим сведения с CSV файл
+                //QFile fileCSV("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/database.csv");
                 QFile fileCSV("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/database.csv");
                 fileCSV.open(QIODevice::Append | QIODevice::Text);
                 QTextStream writeStream(&fileCSV); // Создаем объект класса QTextStream
@@ -49,7 +53,7 @@ void create_database::find_face()
 
         if((position_face[i].number_eyes()==2)&&(position_face[i].get_radius_eyes()[0]>=20)&&(position_face[i].get_radius_eyes()[1]>=20))
         {
-            SendImage_for_crop = CropFace(cropImg, position_face[i].get_coord_eyes().at(0).x,position_face[i].get_coord_eyes().at(0).y, position_face[i].get_coord_eyes().at(1).x, position_face[i].get_coord_eyes().at(1).y, 0.3, 0.3, 200, 200);
+            SendImage_for_crop = CropFace(cropImg, position_face[i].get_coord_eyes().at(0).x,position_face[i].get_coord_eyes().at(0).y, position_face[i].get_coord_eyes().at(1).x, position_face[i].get_coord_eyes().at(1).y, 0.3, 0.3, 200, 200);        
             sign_createDB_send_crop_img(SendImage_for_crop);
         }
     }
@@ -64,7 +68,7 @@ void recognition_face::slot_recogn_face_detect(QImage imgForDetect)
 
 create_database::create_database()
 {
-    scale = 0.35;
+    scale = 0.71;
     save_value = false;
 }
 

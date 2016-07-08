@@ -6,39 +6,49 @@ using namespace cv::face;
 
 Ptr <BasicFaceRecognizer> model;
 
-int face_model:: get_numb_people(Mat Img)
+Mat img_for_database(Mat Img)
 {
     Size ImgSize = Img.size();
     Mat src = Img;//src image
     Mat dst;
-    Mat dst2;
+
     double sclareOX = 92./ImgSize.width;
     double sclareOY = 112./ImgSize.height;
+
     if(sclareOX<sclareOY)//значит больше ширина и мы уменьшаем до нужной ширины пропорционально
     {
-        resize(src,dst,Size(0, 0), 92./ImgSize.width, 92./ImgSize.width, INTER_LINEAR );//resize image
-
-        int diff = (112 - dst.size().height)/2;
-        int diff2 = dst.size().height - diff;
-        qDebug()<<diff;
-        qDebug()<<diff2;
-
-        Rect reg(0, diff, 92, diff2);
-        dst(reg).copyTo(dst2);
+        resize(src,dst,Size(0, 0), sclareOX, sclareOX, INTER_LINEAR);//resize image
     }
-    else
+    else//значит больше высота и мы уменьшаем до нужной высоты пропорционально
     {
-        //resize(src,dst,Size(0, 112));//resize image
-        resize(src,dst,Size(0, 0), 112./ImgSize.height, 112./ImgSize.height, INTER_LINEAR );//resize image
+        resize(src,dst,Size(0, 0), sclareOY, sclareOY, INTER_LINEAR);//resize image
     }
-    //Mat dst1(dst);
-    //Size size(92,112);//the dst image size,e.g.92x112
-    //resize(src,dst,size);//resize image
-    imshow( "Display window", dst2);
+    Mat dst2(112, 92, CV_8UC3);
+    Vec3b col;
+    col[0] = 0; col[1] = 0; col[2] = 0;
+    int detOX = (112 - dst.size().height) / 2;
+    int detOY = (92 - dst.size().width) / 2;
+    for(int h = 0; h < 112; h++)
+    {
+        for(int w = 0; w < 92; w++)
+            dst2.at<Vec3b>(Point(w,h)) = col;
+    }
+    for(int h = 0; h < dst.size().height; h++)
+    {
+        for(int w = 0; w<dst.size().width; w++)
+        {
+            Vec3b color = dst.at<Vec3b>(Point(w,h));
+            dst2.at<Vec3b>(Point(w+detOY,h+detOX)) = color;
+        }
+    }
+    return dst2;
+}
 
-    //to nado snizu
-    //sscvtColor(dst, dst,  CV_RGB2GRAY);//Выставляем нужный колор
-    return 1;//model->predict(dst);
+int face_model:: get_numb_people(Mat Img)
+{
+    Mat img2 = img_for_database(Img);
+    cvtColor(img2, img2,  CV_RGB2GRAY);//Выставляем нужный колор
+    return model->predict(img2);
 }
 
 void face_model::read_csv(const string& filename, vector<Mat>& images, vector<int>& labels)
@@ -63,7 +73,8 @@ void face_model::read_csv(const string& filename, vector<Mat>& images, vector<in
 
 face_model::face_model()
 {
-    string fn_csv = "/home/vgromov/tmp/testcv/test.csv";
+    //string fn_csv = "/home/vgromov/tmp/testcv/test.csv";
+    string fn_csv = "/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/database.csv";
     vector<Mat> images;
     vector<int> labels;
     try {

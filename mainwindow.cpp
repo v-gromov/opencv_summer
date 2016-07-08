@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->horizontalScrollBar->setValue(35);
+    ui->horizontalScrollBar->setValue(71);
     ui->Button_save_face->setEnabled(false);
 }
 

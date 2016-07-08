@@ -11,6 +11,8 @@
 #include <QFileDialog>
 #include <atomic>
 
+Mat img_for_database(Mat);
+
 class myThread: public QThread
 {
     Q_OBJECT

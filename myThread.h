@@ -20,6 +20,34 @@ protected:
     void run(){exec();}
 };
 
+class WorkerForCamThread: public QObject
+{
+    Q_OBJECT
+public:
+    bool getflag();
+public slots:
+    void slot_set_flag(bool);
+private:
+    bool flag;
+};
+
+class cameraThread: public QThread
+{
+    Q_OBJECT
+public:
+    cameraThread();
+    ~cameraThread();
+    WorkerForCamThread worker;
+protected:
+    void run();
+    void functionThread();
+    CvCapture* capture;
+signals:
+    void sign_img_translation(QImage);
+
+};
+
+
 class create_database: public QObject
 {
     Q_OBJECT
@@ -27,36 +55,33 @@ public:
     create_database();
     void find_face();
 public slots:
-    void slot_createDB_get_image(QImage);
+    void slot_createDB_get_crop_image(QImage);
     void slot_createDB_start(QString);
-    void slot_set_scale(int);
     void slot_save_image();
-
-signals:
-    void sign_createDB_send_img(QImage);// отправка картинки с кругами
-    void sign_createDB_send_crop_img(QImage);//отправка кропленой картинки
 private:
-    QImage SendImage;
-    QImage SendImage_for_crop;
     bool save_value;
-
-    std::atomic<float> scale;
+    QImage save_crop_image;
 };
 
-class online_translation: public QObject
+
+class find_face_thread: public QObject
 {
     Q_OBJECT
 public:
-    online_translation();
-    ~online_translation();
-public slots:
-    void slot_online_translation();
-signals:
-    void sign_img_translation(QImage);
+    find_face_thread();
+    void find_face();
 private:
-    CvCapture* capture;
+    QImage SendImage;
+    QImage SendImage_for_crop;
+    QImage SaveImage;
+    std::atomic<float> scale;
+signals:
+    void sign_find_face_thread_send_img(QImage);// отправка картинки с кругами
+    void sign_find_face_thread_send_crop_img(QImage);//отправка кропленой картинки
+public slots:
+     void slot_set_scale(int);
+     void set_image(QImage);
 };
-
 
 class recognition_face: public QObject
 {
@@ -68,5 +93,6 @@ public slots:
 private:
     face_model detect_object;
 };
+
 
 #endif // THREAD_ONE_H

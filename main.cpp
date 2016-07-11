@@ -10,40 +10,46 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     myThread thread_one;//для create DB
-    myThread thread_two;//для online трансляции
+    cameraThread thread_two;//для online трансляции
     myThread thread_three; //для распознавания лица
+    myThread thread_four; //Для кропа картинок
     create_database obj_create_DB;
-    online_translation obj_online;
     recognition_face obj_recogn;
+    find_face_thread obj_crop_face;
 
     obj_create_DB.moveToThread(&thread_one);
-    obj_online.moveToThread(&thread_two);
     obj_recogn.moveToThread(&thread_three);
+    obj_crop_face.moveToThread(&thread_four);
 
     //создание бд
     QObject::connect(&w, SIGNAL(signCreateDatabase(QString)), &obj_create_DB, SLOT(slot_createDB_start(QString)));
-    QObject::connect(&obj_create_DB, SIGNAL(sign_createDB_send_img(QImage)), &w, SLOT(slotSetLabelImg(QImage)));
-    //отображение видеопотока
-    QObject::connect(&w, SIGNAL(signOnlineTransl()), &obj_online, SLOT(slot_online_translation()));
-    //QObject::connect(&obj_online, SIGNAL(sign_img_translation(QImage)), &w, SLOT(slotSetLabelOnllineImg(QImage)));
-    //передача видеокадров в класс создания бд
-    QObject::connect(&obj_online, SIGNAL(sign_img_translation(QImage)), &obj_create_DB, SLOT(slot_createDB_get_image(QImage)));
+    QObject::connect(&obj_crop_face, SIGNAL(sign_find_face_thread_send_img(QImage)), &w, SLOT(slotSetLabelImg(QImage)));
+
     //передача sclare с скрол бара
-    QObject::connect(&w, SIGNAL(signSend_scale(int)), &obj_create_DB, SLOT(slot_set_scale(int)), Qt::DirectConnection);
+    QObject::connect(&w, SIGNAL(signSend_scale(int)), &obj_crop_face, SLOT(slot_set_scale(int)), Qt::DirectConnection);
+
     //передача кропнутой картинки в лэйбл с кропом
-    QObject::connect(&obj_create_DB, SIGNAL(sign_createDB_send_crop_img(QImage)), &w, SLOT(slotSetLableCropImg(QImage)));
-    //передача сигнала о сохранении файла
+    QObject::connect(&obj_crop_face, SIGNAL(sign_find_face_thread_send_crop_img(QImage)), &w, SLOT(slotSetLableCropImg(QImage))); 
+    //передача кропнутой картинки в создать базу данных
+    QObject::connect(&obj_crop_face, SIGNAL(sign_find_face_thread_send_crop_img(QImage)), &obj_create_DB, SLOT(slot_createDB_get_crop_image(QImage)));
+
+    //Передача сигнала о сохранении картинки из MainWindow в поток для сохранения картинки
     QObject::connect(&w, SIGNAL(signSendSave()), &obj_create_DB, SLOT(slot_save_image()), Qt::DirectConnection);
+
     //поиск лиц в recogn_face
-    QObject::connect(&obj_create_DB, SIGNAL(sign_createDB_send_crop_img(QImage)), &obj_recogn, SLOT(slot_recogn_face_detect(QImage)));
+    QObject::connect(&obj_crop_face, SIGNAL(sign_find_face_thread_send_crop_img(QImage)), &obj_recogn, SLOT(slot_recogn_face_detect(QImage)));
     //Получение номера обнаруженного человека
     QObject::connect(&obj_recogn, SIGNAL(sign_getNumberPeople(int)), &w, SLOT(slotPrintNumbPeople(int)));
-    //slotPrintNumbPeople
-    QObject::connect(&obj_online, SIGNAL(sign_img_translation(QImage)), &obj_recogn, SLOT(slot_recogn_face_detect(QImage)));
+
+
+    //Обрезаем картинку. Для этого из потока камеры передаем картинку в поток для кропа имаджи.
+    QObject::connect(&thread_two, SIGNAL(sign_img_translation(QImage)), &obj_crop_face, SLOT(set_image(QImage)));
+    //Добавляет возможность ставить на паузу трансляцию видео.
+    QObject::connect(&w, SIGNAL(setPlayOrPause(bool)), &thread_two.worker, SLOT(slot_set_flag(bool)), Qt::DirectConnection);
     thread_two.start();
+    thread_four.start();
     thread_one.start();
     thread_three.start();
-
     w.show();
     return a.exec();
 }

@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->horizontalScrollBar->setValue(71);
     ui->Button_save_face->setEnabled(false);
+    flag = false;
 }
 
 MainWindow::~MainWindow()
@@ -18,11 +19,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_Button_create_database_clicked()
 {
-    emit signOnlineTransl();
     ui->lineEdit->setEnabled(true);
     ui->lineEdit->clear();
     ui->Button_ok->setEnabled(true);
     ui->Button_save_face->setEnabled(false);
+    flag = !flag;
+    emit setPlayOrPause(1);
+    ui->Button_Find_face->setEnabled(false);
 }
 
 void MainWindow::on_Button_ok_clicked()
@@ -57,13 +60,6 @@ void MainWindow::on_Button_save_face_clicked()
     emit signSendSave();
 }
 
-
-//Оно просто транслирует видеопоток
-/*void MainWindow::slotSetLabelOnllineImg(QImage imdisplay)
-{
-    ui->online_video_label->setPixmap(QPixmap::fromImage(imdisplay));
-}*/
-
 void MainWindow::slotPrintNumbPeople(int numb)
 {
     QString numbstr;
@@ -73,5 +69,9 @@ void MainWindow::slotPrintNumbPeople(int numb)
 
 void MainWindow::on_Button_Find_face_clicked()
 {
-    emit signOnlineTransl();
+    ui->Button_create_database->setEnabled(flag);
+    ui->Button_ok->setEnabled(flag);
+    ui->Button_save_face->setEnabled(flag);
+    flag = !flag;
+    emit setPlayOrPause(flag);
 }

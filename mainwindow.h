@@ -22,7 +22,6 @@ private slots:
     void on_Button_create_database_clicked();
     void on_Button_ok_clicked();
     void slotSetLabelImg(QImage);
-    //void slotSetLabelOnllineImg(QImage);
     void slotSetLableCropImg(QImage);
     void on_horizontalScrollBar_sliderMoved(int);
     void slotPrintNumbPeople(int);
@@ -33,11 +32,12 @@ private slots:
 
 signals:
     void signCreateDatabase(QString);
-    void signOnlineTransl();
     void signSend_scale(int);
     void signSendSave();
+    void setPlayOrPause(bool flag);
 private:
     Ui::MainWindow *ui;
+    bool flag;
 };
 
 

@@ -96,12 +96,14 @@ Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
             Rect nr = nestedObjects[j];
             center.x = cvRound((r.x + nr.x + nr.width*0.5)*scale);
             center.y = cvRound((r.y + nr.y + nr.height*0.5)*scale);
-            write_eyes_array.push_back(center);
 
             radius = cvRound((nr.width + nr.height)*0.25*scale);
-            write_radius_eyes_array.push_back(radius);
-
-            circle(img, center, radius, color, 3, 8, 0 );
+            if((radius>=20)&&((center.x>10)&&(center.x<img.size().width-10))&&((center.y>10)&&(center.x<img.size().height-10)))
+            {
+                write_radius_eyes_array.push_back(radius);
+                write_eyes_array.push_back(center);
+                circle(img, center, radius, color, 3, 8, 0 );
+            }
         }
         find_faces[i].set_coord_eyes(write_eyes_array);
         find_faces[i].set_radius_eyes(write_radius_eyes_array);

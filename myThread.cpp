@@ -95,26 +95,31 @@ void find_face_thread::find_face()
     emit sign_find_face_thread_send_img(img);
     for(int i = 0; i < position_face.size(); i++)
     {
-
-        if((position_face[i].number_eyes()==2)&&(position_face[i].get_radius_eyes()[0]>=20)&&(position_face[i].get_radius_eyes()[1]>=20))
+        if(position_face[i].number_eyes()==2)
         {
-            SendImage_for_crop = CropFace(cropImg, position_face[i].get_coord_eyes().at(0).x,position_face[i].get_coord_eyes().at(0).y, position_face[i].get_coord_eyes().at(1).x, position_face[i].get_coord_eyes().at(1).y, 0.3, 0.3, 200, 200);
-            sign_find_face_thread_send_crop_img(SendImage_for_crop);
+            if(position_face[i].get_coord_eyes().at(1).x-position_face[i].get_coord_eyes().at(0).x>30)
+            {
+                SendImage_for_crop = CropFace(cropImg, position_face[i].get_coord_eyes().at(0).x,position_face[i].get_coord_eyes().at(0).y, position_face[i].get_coord_eyes().at(1).x, position_face[i].get_coord_eyes().at(1).y, 0.3, 0.3, 200, 200);
+                sign_find_face_thread_send_crop_img(SendImage_for_crop);
+                return;
+            }
         }
     }
+    return;
 }
 
 find_face_thread::find_face_thread()
 {
-    scale = 0.71;
+    scale = 2;
 }
 
 void find_face_thread::slot_set_scale(int val)
 {
-    if(val!=0)
+    /*if(val!=0)
         scale = val/100.;
     else
-        scale = 0.1;
+        scale = 0.1;*/
+    scale = 2;
 }
 
 void find_face_thread::set_image(QImage save)

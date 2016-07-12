@@ -12,8 +12,8 @@ Mat img_for_database(Mat Img)
     Mat src = Img;//src image
     Mat dst;
 
-    double sclareOX = 92./ImgSize.width;
-    double sclareOY = 112./ImgSize.height;
+    double sclareOX = 184./ImgSize.width;
+    double sclareOY = 224./ImgSize.height;
 
     if(sclareOX<sclareOY)//значит больше ширина и мы уменьшаем до нужной ширины пропорционально
     {
@@ -23,14 +23,14 @@ Mat img_for_database(Mat Img)
     {
         resize(src,dst,Size(0, 0), sclareOY, sclareOY, INTER_LINEAR);//resize image
     }
-    Mat dst2(112, 92, CV_8UC3);
+    Mat dst2(224, 184, CV_8UC3);
     Vec3b col;
     col[0] = 0; col[1] = 0; col[2] = 0;
-    int detOX = (112 - dst.size().height) / 2;
-    int detOY = (92 - dst.size().width) / 2;
-    for(int h = 0; h < 112; h++)
+    int detOX = (224 - dst.size().height) / 2;
+    int detOY = (184 - dst.size().width) / 2;
+    for(int h = 0; h < 224; h++)
     {
-        for(int w = 0; w < 92; w++)
+        for(int w = 0; w < 184; w++)
             dst2.at<Vec3b>(Point(w,h)) = col;
     }
     for(int h = 0; h < dst.size().height; h++)
@@ -73,7 +73,11 @@ void face_model::read_csv(const string& filename, vector<Mat>& images, vector<in
 
 face_model::face_model()
 {
-    //string fn_csv = "/home/vgromov/tmp/testcv/test.csv";
+    train_model();
+}
+
+void face_model::train_model()
+{
     string fn_csv = "/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/database.csv";
     vector<Mat> images;
     vector<int> labels;

@@ -61,6 +61,8 @@ public slots:
 private:
     bool save_value;
     QImage save_crop_image;
+signals:
+    void slot_numb_image(int);
 };
 
 
@@ -89,9 +91,15 @@ class recognition_face: public QObject
 signals:
     void sign_getNumberPeople(int);
 public slots:
+    void setworkThread(bool);
+    void trainModel();
+public:
+    recognition_face();
+public slots:
     void slot_recogn_face_detect(QImage);
 private:
     face_model detect_object;
+    bool flag_workthread;
 };
 
 

@@ -25,6 +25,7 @@ void MainWindow::on_Button_create_database_clicked()
     ui->Button_save_face->setEnabled(false);
     flag = !flag;
     emit setPlayOrPause(1);
+    emit slotWorkRecogn(0);
     ui->Button_Find_face->setEnabled(false);
 }
 
@@ -69,9 +70,28 @@ void MainWindow::slotPrintNumbPeople(int numb)
 
 void MainWindow::on_Button_Find_face_clicked()
 {
+    //Поставим значения баттонов на значения флага
     ui->Button_create_database->setEnabled(flag);
     ui->Button_ok->setEnabled(flag);
     ui->Button_save_face->setEnabled(flag);
+    //и введем противоположенное значение флага
     flag = !flag;
+    if(flag)
+        emit signtrainModel();
     emit setPlayOrPause(flag);
+    emit slotWorkRecogn(flag);
+}
+
+void MainWindow::slotGetNumbPhoto(int value)
+{
+    ui->lcdNumber_2->display(value);
+    if(value>=10)
+    {
+        //и введем противоположенное значение флага
+        flag = !flag;
+        ui->Button_create_database->setEnabled(1);
+        ui->Button_ok->setEnabled(0);
+        ui->Button_save_face->setEnabled(0);
+        ui->Button_Find_face->setEnabled(1);
+    }
 }

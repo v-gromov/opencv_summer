@@ -24,14 +24,11 @@ int main(int argc, char *argv[])
     //создание бд
     QObject::connect(&w, SIGNAL(signCreateDatabase(QString)), &obj_create_DB, SLOT(slot_createDB_start(QString)));
     QObject::connect(&obj_crop_face, SIGNAL(sign_find_face_thread_send_img(QImage)), &w, SLOT(slotSetLabelImg(QImage)));
-
-    //передача sclare с скрол бара
-    QObject::connect(&w, SIGNAL(signSend_scale(int)), &obj_crop_face, SLOT(slot_set_scale(int)), Qt::DirectConnection);
-
-    //передача кропнутой картинки в лэйбл с кропом
-    QObject::connect(&obj_crop_face, SIGNAL(sign_find_face_thread_send_crop_img(QImage)), &w, SLOT(slotSetLableCropImg(QImage))); 
     //передача кропнутой картинки в создать базу данных
-    QObject::connect(&obj_crop_face, SIGNAL(sign_find_face_thread_send_crop_img(QImage)), &obj_create_DB, SLOT(slot_createDB_get_crop_image(QImage)));
+    QObject::connect(&obj_crop_face, SIGNAL(sign_find_face_thread_send_crop_img(QImage)), &obj_create_DB, SLOT(slot_createDB_get_crop_image(QImage)), Qt::DirectConnection);
+
+    //передача sclare с скрол бара в поток с видео
+    QObject::connect(&w, SIGNAL(signSend_scale(int)), &obj_crop_face, SLOT(slot_set_scale(int)), Qt::DirectConnection);
 
     //Передача сигнала о сохранении картинки из MainWindow в поток для сохранения картинки
     QObject::connect(&w, SIGNAL(signSendSave()), &obj_create_DB, SLOT(slot_save_image()), Qt::DirectConnection);
@@ -41,11 +38,20 @@ int main(int argc, char *argv[])
     //Получение номера обнаруженного человека
     QObject::connect(&obj_recogn, SIGNAL(sign_getNumberPeople(int)), &w, SLOT(slotPrintNumbPeople(int)));
 
-
     //Обрезаем картинку. Для этого из потока камеры передаем картинку в поток для кропа имаджи.
     QObject::connect(&thread_two, SIGNAL(sign_img_translation(QImage)), &obj_crop_face, SLOT(set_image(QImage)));
+    //передача кропнутой картинки в лэйбл с кропом
+    QObject::connect(&obj_crop_face, SIGNAL(sign_find_face_thread_send_crop_img(QImage)), &w, SLOT(slotSetLableCropImg(QImage)));
+
     //Добавляет возможность ставить на паузу трансляцию видео.
     QObject::connect(&w, SIGNAL(setPlayOrPause(bool)), &thread_two.worker, SLOT(slot_set_flag(bool)), Qt::DirectConnection);
+    //Добавляет возможность ставить на паузу трансляцию видео.
+    QObject::connect(&w, SIGNAL(slotWorkRecogn(bool)), &obj_recogn, SLOT(setworkThread(bool)), Qt::DirectConnection);
+
+    //получение отфотканой картинки в MainWindow
+    QObject::connect(&obj_create_DB, SIGNAL(slot_numb_image(int)),&w, SLOT(slotGetNumbPhoto(int)));
+    QObject::connect(&w, SIGNAL(signtrainModel()), &obj_recogn, SLOT(trainModel()));//Тренировка модели
+
     thread_two.start();
     thread_four.start();
     thread_one.start();

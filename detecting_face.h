@@ -14,6 +14,7 @@ using namespace std;
 class face_model
 {
 public:
+    void train_model();
     face_model();
     int get_numb_people(Mat);
 private:

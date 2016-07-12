@@ -25,6 +25,7 @@ private slots:
     void slotSetLableCropImg(QImage);
     void on_horizontalScrollBar_sliderMoved(int);
     void slotPrintNumbPeople(int);
+    void slotGetNumbPhoto(int);
 
     void on_Button_save_face_clicked();
 
@@ -35,6 +36,8 @@ signals:
     void signSend_scale(int);
     void signSendSave();
     void setPlayOrPause(bool flag);
+    void slotWorkRecogn(bool);
+    void signtrainModel();
 private:
     Ui::MainWindow *ui;
     bool flag;

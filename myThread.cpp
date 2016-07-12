@@ -4,7 +4,7 @@
 
 void WorkerForCamThread::slot_set_flag(bool flagval)
 {
-   flag = flagval;
+    flag = flagval;
 }
 bool WorkerForCamThread::getflag()
 {
@@ -13,7 +13,6 @@ bool WorkerForCamThread::getflag()
 
 void create_database::slot_createDB_get_crop_image(QImage res)
 {
-    qDebug()<<"SAVE CROP GET";
     save_crop_image = res;
 }
 
@@ -24,7 +23,7 @@ void create_database::slot_createDB_start(QString name_people)
     {
         QDir().mkdir(name_people);
         int numb_photo = 0;
-        while(numb_photo<=10)
+        while(numb_photo<10)
         {
             if((save_value)&&(!save_crop_image.isNull()))
             {
@@ -47,15 +46,9 @@ void create_database::slot_createDB_start(QString name_people)
                 QTextStream writeStream(&fileCSV); // Создаем объект класса QTextStream
                 writeStream <<path_to_file + "\n"; // Посылаем строку в поток для записи
                 fileCSV.close(); // Закрываем файл
-
                 save_value = false;
                 numb_photo++;
-            }
-            else if(save_value)
-            {
-                qDebug()<<save_crop_image.isNull();
-                save_value = false;
-                qDebug()<<"IM HERE";
+                emit slot_numb_image(numb_photo);
             }
         }
     }
@@ -101,16 +94,17 @@ void find_face_thread::set_image(QImage save)
 
 void recognition_face::slot_recogn_face_detect(QImage imgForDetect)
 {
-    Mat i = qimage2mat(imgForDetect);
-    int numb = detect_object.get_numb_people(i);
-    emit sign_getNumberPeople(numb);
+    if(flag_workthread){
+        Mat i = qimage2mat(imgForDetect);
+        int numb = detect_object.get_numb_people(i);
+        emit sign_getNumberPeople(numb);
+    }
 }
 
 create_database::create_database()
 {
     save_value = false;
 }
-
 
 void create_database::slot_save_image()
 {
@@ -142,4 +136,18 @@ void cameraThread::run()
     while(true)
         functionThread();
     exec();
+}
+
+recognition_face::recognition_face()
+{
+    flag_workthread = false;
+}
+void recognition_face::setworkThread(bool val)
+{
+    flag_workthread = val;
+}
+
+void recognition_face::trainModel()
+{
+    detect_object.train_model();
 }

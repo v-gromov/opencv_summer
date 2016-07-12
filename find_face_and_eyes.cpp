@@ -2,7 +2,6 @@
 
 QVector <face> center_faces(QImage frame, QImage* ResultImg, float scale)
 {
-    //scale 0.4 is good
     QVector <face> null_face;
     QVector <face> find_faces;
     int number_of_true_face = -1;
@@ -18,19 +17,17 @@ QVector <face> center_faces(QImage frame, QImage* ResultImg, float scale)
         cerr << "ERROR: Could not load classifier cascade" << endl;
         return null_face;
     }
-
     Mat image = qimage2mat(frame);
-    if(image.empty()) cout << "Couldn't read image" << endl;
-    if(!image.empty())
+    if(image.empty())
     {
-        *ResultImg = Mat2QImage(detect_Face_and_eyes(image, cascade, nestedCascade, scale, find_faces));
+        cout << "Couldn't read image" << endl;
+        return null_face;
     }
-    int case_value = 0;
+    *ResultImg = Mat2QImage(detect_Face_and_eyes(image, cascade, nestedCascade, scale, find_faces));
     for(int i = 0; i < find_faces.size(); i++)
     {
         if(find_faces[i].number_eyes()>=1)
         {
-            case_value = 1;
             number_of_true_face = i;
         }
     }
@@ -156,17 +153,10 @@ QImage convert_lpl_qimg(IplImage* frame)
 }
 
 Mat qimage2mat(QImage& qimage) {
-    //qimage.toPixelFormat(QImage::Format_RGB888);
-    //qDebug() << "Convert-Image format: " << qimage.format();
     cv::Mat tmp(qimage.height(),qimage.width(),CV_8UC3,(uchar*)qimage.bits(),qimage.bytesPerLine());
     cv::Mat result; // deep copy just in case (my lack of knowledge with open cv)
     cvtColor(tmp, result,CV_BGR2RGB);
     return result;
-    /*cv::Mat mat = cv::Mat(qimage.height(), qimage.width(), CV_8UC3, (uchar*)qimage.bits(), qimage.bytesPerLine());
-    cv::Mat mat2 = cv::Mat(mat.rows, mat.cols, CV_8UC3 );
-    int from_to[] = { 0,0,  1,1,  2,2 };
-    cv::mixChannels( &mat, 1, &mat2, 1, from_to, 3 );
-    return mat2;*/
 }
 
 QImage Mat2QImage(const Mat &src) {

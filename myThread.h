@@ -16,6 +16,8 @@ Mat img_for_database(Mat);
 class myThread: public QThread
 {
     Q_OBJECT
+public:
+    ~myThread();
 protected:
     void run(){exec();}
 };

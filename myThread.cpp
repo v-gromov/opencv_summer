@@ -16,7 +16,6 @@ void create_database::slot_createDB_get_crop_image(QImage res)
     save_crop_image = res;
 }
 
-
 void create_database::slot_createDB_start(QString name_people)
 {
     if (!name_people.isEmpty())
@@ -28,58 +27,64 @@ void create_database::slot_createDB_start(QString name_people)
         {
             qDebug() << "Ошибка открытия для чтения";
         }
-        int end_numb = 0;
-        while(!fileWithName.atEnd())
+        else
         {
-            QString str;
-            str = fileWithName.readLine();
-            QStringList list1 = str.split(' ');
-            QString value = list1.at(1);
-            if(value.toInt()>end_numb)
-                end_numb = value.toInt();
-        }
-        end_numb++;
-        fileWithName.close();
-        fileWithName.setFileName("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/name_users.csv");
-        if (!fileWithName.open(QIODevice::Append | QIODevice::Text))
-        {
-            qDebug() << "Ошибка открытия для чтения";
-        }
-        QString tmp_str;
-        tmp_str.setNum(end_numb);
-        QString numberAndName = name_people + " "+tmp_str;
-        QTextStream StreamFile(&fileWithName); // Создаем объект класса QTextStream
-        StreamFile <<numberAndName + "\n"; // Посылаем строку в поток для записи
-        fileWithName.close();
-
-        //---------------------
-        int numb_photo = 0;
-        while(numb_photo<10)
-        {
-            if((save_value)&&(!save_crop_image.isNull()))
+            int end_numb = 0;
+            while(!fileWithName.atEnd())
             {
-                Mat fordb = img_for_database(qimage2mat(save_crop_image));
-                cvtColor(fordb, fordb,  CV_RGB2BGR);//Выставляем нужный колор
-                save_crop_image = Mat2QImage(fordb);
-                QPixmap pixmap;
-                pixmap = pixmap.fromImage(save_crop_image.scaled(save_crop_image.width(),save_crop_image.height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
-                QString tmp2;
-                tmp2.setNum(numb_photo);
-                QString path_to_file = "/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/"+name_people+"/image_crop"+tmp2+".jpg";
-                //сохраним файл
-                QFile file(path_to_file);
-                file.open(QIODevice::WriteOnly);
-                pixmap.save(&file, "jpg",100);
-                file.close();
-                //добавим сведения с CSV файл
-                QFile fileCSV("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/database.csv");
-                fileCSV.open(QIODevice::Append | QIODevice::Text);
-                QTextStream writeStream(&fileCSV); // Создаем объект класса QTextStream
-                writeStream <<path_to_file + ";"+tmp_str+"\n"; // Посылаем строку в поток для записи
-                fileCSV.close(); // Закрываем файл
-                save_value = false;
-                numb_photo++;
-                emit slot_numb_image(numb_photo);
+                QString str;
+                str = fileWithName.readLine();
+                QStringList list1 = str.split(' ');
+                QString value = list1.at(1);
+                if(value.toInt()>end_numb)
+                    end_numb = value.toInt();
+            }
+            end_numb++;
+            fileWithName.close();
+            fileWithName.setFileName("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/name_users.csv");
+            if (!fileWithName.open(QIODevice::Append | QIODevice::Text))
+            {
+                qDebug() << "Ошибка открытия для чтения";
+            }
+            else
+            {
+                QString tmp_str;
+                tmp_str.setNum(end_numb);
+                QString numberAndName = name_people + " "+tmp_str;
+                QTextStream StreamFile(&fileWithName); // Создаем объект класса QTextStream
+                StreamFile <<numberAndName + "\n"; // Посылаем строку в поток для записи
+                fileWithName.close();
+
+                //---------------------
+                int numb_photo = 0;
+                while(numb_photo<10)
+                {
+                    if((save_value)&&(!save_crop_image.isNull()))
+                    {
+                        Mat fordb = img_for_database(qimage2mat(save_crop_image));
+                        cvtColor(fordb, fordb,  CV_RGB2BGR);//Выставляем нужный колор
+                        save_crop_image = Mat2QImage(fordb);
+                        QPixmap pixmap;
+                        pixmap = pixmap.fromImage(save_crop_image.scaled(save_crop_image.width(),save_crop_image.height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
+                        QString tmp2;
+                        tmp2.setNum(numb_photo);
+                        QString path_to_file = "/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/"+name_people+"/image_crop"+tmp2+".jpg";
+                        //сохраним файл
+                        QFile file(path_to_file);
+                        file.open(QIODevice::WriteOnly);
+                        pixmap.save(&file, "jpg",100);
+                        file.close();
+                        //добавим сведения с CSV файл
+                        QFile fileCSV("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/database.csv");
+                        fileCSV.open(QIODevice::Append | QIODevice::Text);
+                        QTextStream writeStream(&fileCSV); // Создаем объект класса QTextStream
+                        writeStream <<path_to_file + ";"+tmp_str+"\n"; // Посылаем строку в поток для записи
+                        fileCSV.close(); // Закрываем файл
+                        save_value = false;
+                        numb_photo++;
+                        emit slot_numb_image(numb_photo);
+                    }
+                }
             }
         }
     }
@@ -92,6 +97,7 @@ void find_face_thread::find_face()
     QImage cropImg = SaveImage;
 
     QImage img = *res;
+    delete res;
     emit sign_find_face_thread_send_img(img);
     for(int i = 0; i < position_face.size(); i++)
     {
@@ -110,16 +116,17 @@ void find_face_thread::find_face()
 
 find_face_thread::find_face_thread()
 {
-    scale = 2;
+    scale = 1;
 }
 
 void find_face_thread::slot_set_scale(int val)
 {
+    //пока повременить. Очень низкий sclare < 1 дает полную загрузку проца
     /*if(val!=0)
         scale = val/100.;
     else
         scale = 0.1;*/
-    scale = 2;
+    scale = 1;
 }
 
 void find_face_thread::set_image(QImage save)
@@ -157,6 +164,7 @@ cameraThread::~cameraThread()
 {
     cvReleaseCapture( &capture );
     cvDestroyWindow("capture");
+    this->quit();
 }
 
 void cameraThread::functionThread()
@@ -194,15 +202,24 @@ QString recognition_face::parserName(int value)
     if (!fileWithName.open(QIODevice::ReadOnly))
     {
         qDebug() << "Ошибка открытия для чтения";
+        return "Error";
     }
-    while(!fileWithName.atEnd())
+    else
     {
-        QString str = fileWithName.readLine();
-        QStringList list1 = str.split(' ');
-        QString val_str = list1.at(1);
-        int str_numb = val_str.toInt();
-        if(value == str_numb)
-            return list1.at(0);
+        while(!fileWithName.atEnd())
+        {
+            QString str = fileWithName.readLine();
+            QStringList list1 = str.split(' ');
+            QString val_str = list1.at(1);
+            int str_numb = val_str.toInt();
+            if(value == str_numb)
+                return list1.at(0);
+        }
     }
     return "NoName";
+}
+
+myThread::~myThread()
+{
+    this->quit();
 }

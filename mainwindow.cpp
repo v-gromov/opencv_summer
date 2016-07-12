@@ -61,11 +61,9 @@ void MainWindow::on_Button_save_face_clicked()
     emit signSendSave();
 }
 
-void MainWindow::slotPrintNumbPeople(int numb)
+void MainWindow::slotPrintNamePeople(QString name)
 {
-    QString numbstr;
-    numbstr.setNum(numb);
-    ui->Infolabel->setText(numbstr);
+    ui->Infolabel->setText(name);
 }
 
 void MainWindow::on_Button_Find_face_clicked()
@@ -93,5 +91,6 @@ void MainWindow::slotGetNumbPhoto(int value)
         ui->Button_ok->setEnabled(0);
         ui->Button_save_face->setEnabled(0);
         ui->Button_Find_face->setEnabled(1);
+        ui->lcdNumber_2->display(0);
     }
 }

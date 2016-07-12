@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     //поиск лиц в recogn_face
     QObject::connect(&obj_crop_face, SIGNAL(sign_find_face_thread_send_crop_img(QImage)), &obj_recogn, SLOT(slot_recogn_face_detect(QImage)));
     //Получение номера обнаруженного человека
-    QObject::connect(&obj_recogn, SIGNAL(sign_getNumberPeople(int)), &w, SLOT(slotPrintNumbPeople(int)));
+    QObject::connect(&obj_recogn, SIGNAL(sign_getNamePeople(QString)), &w, SLOT(slotPrintNamePeople(QString)));
 
     //Обрезаем картинку. Для этого из потока камеры передаем картинку в поток для кропа имаджи.
     QObject::connect(&thread_two, SIGNAL(sign_img_translation(QImage)), &obj_crop_face, SLOT(set_image(QImage)));

@@ -22,6 +22,37 @@ void create_database::slot_createDB_start(QString name_people)
     if (!name_people.isEmpty())
     {
         QDir().mkdir(name_people);
+        //---------------------
+        QFile fileWithName("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/name_users.csv");
+        if (!fileWithName.open(QIODevice::ReadOnly))
+        {
+            qDebug() << "Ошибка открытия для чтения";
+        }
+        int end_numb = 0;
+        while(!fileWithName.atEnd())
+        {
+            QString str;
+            str = fileWithName.readLine();
+            QStringList list1 = str.split(' ');
+            QString value = list1.at(1);
+            if(value.toInt()>end_numb)
+                end_numb = value.toInt();
+        }
+        end_numb++;
+        fileWithName.close();
+        fileWithName.setFileName("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/name_users.csv");
+        if (!fileWithName.open(QIODevice::Append | QIODevice::Text))
+        {
+            qDebug() << "Ошибка открытия для чтения";
+        }
+        QString tmp_str;
+        tmp_str.setNum(end_numb);
+        QString numberAndName = name_people + " "+tmp_str;
+        QTextStream StreamFile(&fileWithName); // Создаем объект класса QTextStream
+        StreamFile <<numberAndName + "\n"; // Посылаем строку в поток для записи
+        fileWithName.close();
+
+        //---------------------
         int numb_photo = 0;
         while(numb_photo<10)
         {
@@ -44,7 +75,7 @@ void create_database::slot_createDB_start(QString name_people)
                 QFile fileCSV("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/database.csv");
                 fileCSV.open(QIODevice::Append | QIODevice::Text);
                 QTextStream writeStream(&fileCSV); // Создаем объект класса QTextStream
-                writeStream <<path_to_file + "\n"; // Посылаем строку в поток для записи
+                writeStream <<path_to_file + ";"+tmp_str+"\n"; // Посылаем строку в поток для записи
                 fileCSV.close(); // Закрываем файл
                 save_value = false;
                 numb_photo++;
@@ -97,7 +128,7 @@ void recognition_face::slot_recogn_face_detect(QImage imgForDetect)
     if(flag_workthread){
         Mat i = qimage2mat(imgForDetect);
         int numb = detect_object.get_numb_people(i);
-        emit sign_getNumberPeople(numb);
+        emit sign_getNamePeople(parserName(numb));
     }
 }
 
@@ -150,4 +181,23 @@ void recognition_face::setworkThread(bool val)
 void recognition_face::trainModel()
 {
     detect_object.train_model();
+}
+
+QString recognition_face::parserName(int value)
+{
+    QFile fileWithName("/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/name_users.csv");
+    if (!fileWithName.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Ошибка открытия для чтения";
+    }
+    while(!fileWithName.atEnd())
+    {
+        QString str = fileWithName.readLine();
+        QStringList list1 = str.split(' ');
+        QString val_str = list1.at(1);
+        int str_numb = val_str.toInt();
+        if(value == str_numb)
+            return list1.at(0);
+    }
+    return "NoName";
 }

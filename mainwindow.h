@@ -24,7 +24,7 @@ private slots:
     void slotSetLabelImg(QImage);
     void slotSetLableCropImg(QImage);
     void on_horizontalScrollBar_sliderMoved(int);
-    void slotPrintNumbPeople(int);
+    void slotPrintNamePeople(QString);
     void slotGetNumbPhoto(int);
 
     void on_Button_save_face_clicked();

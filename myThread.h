@@ -89,12 +89,13 @@ class recognition_face: public QObject
 {
     Q_OBJECT
 signals:
-    void sign_getNumberPeople(int);
+    void sign_getNamePeople(QString);
 public slots:
     void setworkThread(bool);
     void trainModel();
 public:
     recognition_face();
+    QString parserName(int);
 public slots:
     void slot_recogn_face_detect(QImage);
 private:

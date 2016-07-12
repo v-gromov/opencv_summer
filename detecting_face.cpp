@@ -73,7 +73,7 @@ void face_model::read_csv(const string& filename, vector<Mat>& images, vector<in
 
 face_model::face_model()
 {
-    train_model();
+    //train_model();
 }
 
 void face_model::train_model()

@@ -108,47 +108,12 @@ Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
     return img;
 }
 
-QVector<Point> face::get_coord_eyes()
-{
-    return coord_eyes;
-}
-
-QVector<int> face::get_radius_eyes()
-{
-    return radius_eyes;
-}
-
-
-Point face::get_coord_face()
-{
-    return coord_face;
-}
-
-void face::set_coord_face(Point set)
-{
-    coord_face = set;
-}
-
-void face::set_coord_eyes(QVector<Point>  set)
-{
-    coord_eyes = set;
-}
-
-void face::set_radius_eyes(QVector<int>  set)
-{
-    radius_eyes = set;
-}
-
-int face::number_eyes()
-{
-    return coord_eyes.size();
-}
-
 QImage convert_lpl_qimg(IplImage* frame)
 {
     Mat img = cvarrToMat(frame);
     cv::cvtColor(img,img,CV_BGR2RGB); //Qt reads in RGB whereas CV in BGR
     QImage imdisplay((uchar*)img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
+    img.release();
     return imdisplay;
 }
 

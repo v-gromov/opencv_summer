@@ -10,16 +10,16 @@
 #include <QFile>
 #include <QFileDialog>
 #include <atomic>
+#include <QDebug>
+#include <
 
 Mat img_for_database(Mat);
 
 class myThread: public QThread
 {
     Q_OBJECT
-public:
-    ~myThread();
 protected:
-    void run(){exec();}
+    void run(){qDebug()<<exec();}
 };
 
 class WorkerForCamThread: public QObject
@@ -27,10 +27,15 @@ class WorkerForCamThread: public QObject
     Q_OBJECT
 public:
     bool getflag();
+    bool getend();
 public slots:
     void slot_set_flag(bool);
+    void end_thread();
 private:
     bool flag;
+    bool end_flag;
+public:
+    WorkerForCamThread();
 };
 
 class cameraThread: public QThread

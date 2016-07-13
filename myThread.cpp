@@ -6,9 +6,26 @@ void WorkerForCamThread::slot_set_flag(bool flagval)
 {
     flag = flagval;
 }
+
+void WorkerForCamThread::end_thread()
+{
+    end_flag = false;
+}
+
 bool WorkerForCamThread::getflag()
 {
     return flag;
+}
+
+bool WorkerForCamThread::getend()
+{
+    return end_flag;
+}
+
+WorkerForCamThread::WorkerForCamThread()
+{
+    flag = true;
+    end_flag = true;
 }
 
 void create_database::slot_createDB_get_crop_image(QImage res)
@@ -156,6 +173,7 @@ void create_database::slot_save_image()
 
 cameraThread::cameraThread()
 {
+    videoInput VI;
     capture = cvCaptureFromCAM(0);
     assert(capture);
 }
@@ -164,12 +182,12 @@ cameraThread::~cameraThread()
 {
     cvReleaseCapture( &capture );
     cvDestroyWindow("capture");
-    this->quit();
 }
 
 void cameraThread::functionThread()
 {
-    if(worker.getflag()){
+    if(worker.getflag())
+    {
         IplImage* frame = cvQueryFrame(capture);
         emit sign_img_translation(convert_lpl_qimg(frame));
     }
@@ -177,9 +195,10 @@ void cameraThread::functionThread()
 
 void cameraThread::run()
 {
-    while(true)
+    while(worker.getend())
+    {
         functionThread();
-    exec();
+    }
 }
 
 recognition_face::recognition_face()
@@ -215,11 +234,7 @@ QString recognition_face::parserName(int value)
             if(value == str_numb)
                 return list1.at(0);
         }
+        fileWithName.close();
     }
     return "NoName";
-}
-
-myThread::~myThread()
-{
-    this->quit();
 }

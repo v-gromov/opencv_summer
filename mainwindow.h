@@ -17,6 +17,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
+    void send_sign();
     ~MainWindow();
 private slots:
     void on_Button_create_database_clicked();
@@ -38,6 +39,8 @@ signals:
     void setPlayOrPause(bool flag);
     void slotWorkRecogn(bool);
     void signtrainModel();
+
+    void end_threads();
 private:
     Ui::MainWindow *ui;
     bool flag;

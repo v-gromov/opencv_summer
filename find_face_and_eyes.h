@@ -15,13 +15,13 @@ using namespace cv;
 class face
 {
 public:
-    Point get_coord_face();
-    QVector<Point> get_coord_eyes();
-    QVector<int> get_radius_eyes();
-    void set_coord_face(Point);
-    void set_coord_eyes(QVector<Point>);
-    void set_radius_eyes(QVector<int>);
-    int number_eyes();
+    Point get_coord_face() { return coord_face;}
+    QVector<Point> get_coord_eyes() {return coord_eyes;}
+    QVector<int> get_radius_eyes() {return radius_eyes;}
+    void set_coord_face(Point set){coord_face = set;}
+    void set_coord_eyes(QVector<Point> set){coord_eyes = set;}
+    void set_radius_eyes(QVector<int> set){radius_eyes = set;}
+    int number_eyes(){return coord_eyes.size();}
 private:
     Point coord_face;
     QVector <Point> coord_eyes;

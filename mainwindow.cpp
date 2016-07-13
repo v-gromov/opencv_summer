@@ -17,6 +17,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::send_sign()
+{
+    emit end_threads();
+}
+
 void MainWindow::on_Button_create_database_clicked()
 {
     ui->lineEdit->setEnabled(true);

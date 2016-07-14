@@ -57,9 +57,13 @@ int face_model:: get_numb_people(Mat Img)
     {
         Mat img2 = img_for_database(Img);
         cvtColor(img2, img2,  CV_RGB2GRAY);//Выставляем нужный колор
-        return model->predict(img2);
+        int predicted_label = -1;
+        double predicted_confidence = 0.0;
+        model->predict(img2, predicted_label, predicted_confidence);
+        if(predicted_confidence< 3000)
+            return predicted_label;
     }
-    else return -1;
+    return -1;
 }
 
 void face_model::read_csv(const string& filename, vector<Mat>& images, vector<int>& labels)
@@ -80,10 +84,6 @@ void face_model::read_csv(const string& filename, vector<Mat>& images, vector<in
             labels.push_back(atoi(classlabel.c_str()));
         }
     }
-}
-
-face_model::face_model()
-{
 }
 
 void face_model::train_model()

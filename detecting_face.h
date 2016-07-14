@@ -2,6 +2,7 @@
 #define DETECTING_FACE_H
 
 #include "opencv2/opencv.hpp"
+
 using namespace cv;
 
 #include <string.h>
@@ -15,7 +16,6 @@ class face_model
 {
 public:
     void train_model();
-    face_model();
     int get_numb_people(Mat);
 private:
     void read_csv(const string&, vector<Mat>&, vector<int>&);

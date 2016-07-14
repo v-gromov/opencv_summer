@@ -11,7 +11,8 @@
 #include <QFileDialog>
 #include <atomic>
 #include <QDebug>
-#include <
+#include <QMutex>
+
 
 Mat img_for_database(Mat);
 
@@ -19,23 +20,23 @@ class myThread: public QThread
 {
     Q_OBJECT
 protected:
-    void run(){qDebug()<<exec();}
+    void run(){exec();}
 };
 
 class WorkerForCamThread: public QObject
 {
     Q_OBJECT
 public:
-    bool getflag();
-    bool getend();
+    bool getflag(){return flag;}
+    bool getend(){return end_flag;}
 public slots:
-    void slot_set_flag(bool);
-    void end_thread();
+    void slot_set_flag(bool flagval){flag = flagval;}
+    void end_thread(){end_flag = false;}
 private:
     bool flag;
     bool end_flag;
 public:
-    WorkerForCamThread();
+    WorkerForCamThread(){flag = true; end_flag = true;}
 };
 
 class cameraThread: public QThread
@@ -47,7 +48,6 @@ public:
     WorkerForCamThread worker;
 protected:
     void run();
-    void functionThread();
     CvCapture* capture;
 signals:
     void sign_img_translation(QImage);
@@ -62,7 +62,7 @@ public:
     create_database();
     void find_face();
 public slots:
-    void slot_createDB_get_crop_image(QImage);
+    void slot_createDB_get_crop_image(QImage res){save_crop_image = res;}
     void slot_createDB_start(QString);
     void slot_save_image();
 private:

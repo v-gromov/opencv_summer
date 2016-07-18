@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1437</width>
-    <height>932</height>
+    <width>1084</width>
+    <height>704</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -142,7 +142,7 @@
    <widget class="QLabel" name="image_crop_label">
     <property name="geometry">
      <rect>
-      <x>750</x>
+      <x>800</x>
       <y>270</y>
       <width>251</width>
       <height>221</height>
@@ -220,7 +220,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1437</width>
+     <width>1084</width>
      <height>20</height>
     </rect>
    </property>

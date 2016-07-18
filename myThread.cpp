@@ -29,8 +29,9 @@ void find_face_thread::find_face()
     return;
 }
 
-find_face_thread::find_face_thread()
+find_face_thread::find_face_thread(cameraThread *obj)
 {
+    parrent = obj;
     scale = 1;
 }
 
@@ -46,9 +47,11 @@ void find_face_thread::slot_set_scale(int val)
 
 void find_face_thread::set_image(QImage save)
 {
-    qDebug()<<"SET_IMAGE";
-    SaveImage = save;
-    find_face();
+    if(!parrent->isFinished())
+    {
+        SaveImage = save;
+        find_face();
+    }
 }
 
 void recognition_face::slot_recogn_face_detect(QImage imgForDetect)
@@ -72,7 +75,7 @@ void create_database::slot_save_image()
 
 cameraThread::cameraThread()
 {
-    capture = cvCaptureFromCAM(0);
+    capture = cvCaptureFromCAM(CV_CAP_ANY);
     assert(capture);
 }
 
@@ -92,7 +95,6 @@ void cameraThread::run()
             emit sign_img_translation(convert_lpl_qimg(frame));
         }
     }
-    qDebug()<<"IM END";
 }
 
 recognition_face::recognition_face()

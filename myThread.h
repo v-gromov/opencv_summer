@@ -12,6 +12,7 @@
 #include <atomic>
 #include <QDebug>
 #include <QMutex>
+#include <QMessageBox>
 
 
 Mat img_for_database(Mat);
@@ -77,13 +78,15 @@ class find_face_thread: public QObject
 {
     Q_OBJECT
 public:
-    find_face_thread();
+    find_face_thread(cameraThread *obj);
     void find_face();
 private:
     QImage SendImage;
     QImage SendImage_for_crop;
     QImage SaveImage;
     std::atomic<float> scale;
+    cameraThread* parrent;
+
 signals:
     void sign_find_face_thread_send_img(QImage);// отправка картинки с кругами
     void sign_find_face_thread_send_crop_img(QImage);//отправка кропленой картинки

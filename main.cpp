@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     myThread thread_createDB;//Поток для создания базы данных из обрезанных картинок (не распознанных)
 
     //Поскольку определенные слоты в потоке будут выполняться в потоке родителя, т.е. в MainWindow. Тут создаются объекты, слоты которых будут выполняться в отдельных потоках
-    find_face_thread obj_crop_face; //Объект для обрезки картинок.
+    find_face_thread obj_crop_face(&thread_online_img); //Объект для обрезки картинок.
     recognition_face obj_recogn;    //Объект для распознавания лиц
     create_database obj_create_DB;  //Объект для создания БД
     //Поместим найденные объекты в потоки. Их слоты уже будут выполняться в потоках, куда их поместим
@@ -53,19 +53,16 @@ int main(int argc, char *argv[])
     a.exec();   //Работа MainWindow
 
     /*---Далее идет код, когда закрыт mainWindow ---*/
+    thread_crop_img.signalsBlocked();
     w.send_sign(); //отправка сигнала для завершения потокока с камерой
     //thread_online_img.quit();
     thread_crop_img.quit();
     thread_online_img.wait(); //ожидание завершения потока, который завершается по этому сигналу
-    qDebug()<<"a";
     thread_crop_img.quit();
     thread_crop_img.wait();
-    qDebug()<<"b";
     thread_recogn_face.quit();
     thread_recogn_face.wait();
-    qDebug()<<"c";
     thread_createDB.quit();
     thread_createDB.wait();
-    qDebug()<<"d";
     return 0;
 }

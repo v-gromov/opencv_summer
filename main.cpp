@@ -31,12 +31,11 @@ int main(int argc, char *argv[])
     QObject::connect(&obj_crop_face, SIGNAL(sign_find_face_thread_send_img(QImage)), &w, SLOT(slotSetLabelImg(QImage)));//Этот сигнал передает картинку с кругами в MainWindow
    // QObject::connect(&w, SIGNAL(signSend_scale(int)), &obj_crop_face, SLOT(slot_set_scale(int)), Qt::DirectConnection); //передача sclare с скрол бара в поток с трансляции картинок
 
-
     QObject::connect(&w, SIGNAL(signCreateDatabase(QString)), &obj_create_DB, SLOT(slot_createDB_start(QString)));  //По этому сигналу будет запущена функция в потоке для создания БД
     QObject::connect(&w, SIGNAL(signSendSave()), &obj_create_DB, SLOT(slot_save_image()), Qt::DirectConnection);//Передача сигнала, чтобы была сохранена картинка для базы данных
     QObject::connect(&obj_create_DB, SIGNAL(slot_numb_image(int)),&w, SLOT(slotGetNumbPhoto(int)));//получение номера картинки, которая добавляется в БД (картинок должно быть 10)
 
-    QObject::connect(&w, SIGNAL(signtrainModel()), &obj_recogn, SLOT(trainModel()));//Сигнал для "тренировки" модели распознавания лиц. Поскольку могут добавляться новые лица
+    QObject::connect(&w, SIGNAL(signtrainModel(int, int)), &obj_recogn, SLOT(trainModel(int,int)));//Сигнал для "тренировки" модели распознавания лиц. Поскольку могут добавляться новые лица
     QObject::connect(&obj_recogn, SIGNAL(sign_getNamePeople(QString)), &w, SLOT(slotPrintNamePeople(QString))); //возвращение имени обнаруженного лица с потока обнаружения лиц
 
     QObject::connect(&w, SIGNAL(setPlayOrPause(bool)), &thread_online_img.worker, SLOT(slot_set_flag(bool)), Qt::DirectConnection); //позволяет ставить на "паузу" передачу Online картинок в поток для обрезки картинки
@@ -44,11 +43,13 @@ int main(int argc, char *argv[])
 
     QObject::connect(&w, SIGNAL(end_threads()), &thread_online_img.worker, SLOT(end_thread()), Qt::DirectConnection);//Отправка сигнала о завершении работы Mainwindow для потока с трансляции с камеры
 
+
     thread_online_img.start(); //Запуск потока с трансляцией online картинки
     thread_crop_img.start();    //запуск потока для создания обрезанных картинок с лицом
     thread_createDB.start();    //запуск потока для создания базы данных с обрезанных картинок
     thread_recogn_face.start(); //запускпотока для распознавания лиц с обрезанных картинок
 
+    w.setWindowTitle("Program for detected face");
     w.show();   //просмотр MainWindow
     a.exec();   //Работа MainWindow
 

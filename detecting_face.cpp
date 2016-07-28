@@ -4,7 +4,8 @@
 #include <QDebug>
 using namespace cv::face;
 
-Ptr <BasicFaceRecognizer> model;
+//Ptr <BasicFaceRecognizer> model;
+Ptr <FaceRecognizer> model;
 
 Mat img_for_database(Mat Img)
 {
@@ -60,7 +61,7 @@ int face_model:: get_numb_people(Mat Img)
         int predicted_label = -1;
         double predicted_confidence = 0.0;
         model->predict(img2, predicted_label, predicted_confidence);
-        if(predicted_confidence< 3000)
+        if(predicted_confidence< recognition_threshold)
             return predicted_label;
     }
     return -1;
@@ -86,7 +87,7 @@ void face_model::read_csv(const string& filename, vector<Mat>& images, vector<in
     }
 }
 
-void face_model::train_model()
+void face_model::train_model(int set_model)
 {
     string fn_csv = "/home/vgromov/Projects/build-opencv_summer-Desktop-Debug/database.csv";
     vector<Mat> images;
@@ -101,25 +102,23 @@ void face_model::train_model()
         string error_message = "Error in data. No image for work!!";
         CV_Error(Error::StsError, error_message);
     }
-    model = createEigenFaceRecognizer();
-    model->train(images, labels);
-}
-
-Mat face_model::norm_0_255(InputArray _src) {
-    Mat src = _src.getMat();
-    // Create and return normalized image:
-    Mat dst;
-    switch(src.channels()) {
+    switch(set_model)
+    {
     case 1:
-        cv::normalize(_src, dst, 0, 255, NORM_MINMAX, CV_8UC1);
+        model = createEigenFaceRecognizer();
+        model->train(images, labels);
+        break;
+    case 2:
+        model =  createFisherFaceRecognizer();
+       model->train(images, labels);
         break;
     case 3:
-        cv::normalize(_src, dst, 0, 255, NORM_MINMAX, CV_8UC3);
+        model = createLBPHFaceRecognizer();
+        model->train(images, labels);
         break;
     default:
-        src.copyTo(dst);
+        string error_message = "The method for detection face not selected!";
+        CV_Error(Error::StsError, error_message);
         break;
     }
-    return dst;
 }
-

@@ -8,7 +8,7 @@
 void find_face_thread::find_face()
 {
     QImage* res = new QImage;
-    QVector <face> position_face = center_faces(SaveImage, res, scale);
+    QVector <face> position_face = center_faces(SaveImage, res, 1);
     QImage cropImg = SaveImage;
 
     QImage img = *res;
@@ -32,7 +32,7 @@ void find_face_thread::find_face()
 find_face_thread::find_face_thread(cameraThread *obj)
 {
     parrent = obj;
-    scale = 1;
+    //scale = 1;
 }
 
 void find_face_thread::slot_set_scale(int val)
@@ -42,7 +42,7 @@ void find_face_thread::slot_set_scale(int val)
         scale = val/100.;
     else
         scale = 0.1;*/
-    scale = 1;
+    //scale = 1;
 }
 
 void find_face_thread::set_image(QImage save)
@@ -106,9 +106,10 @@ void recognition_face::setworkThread(bool val)
     flag_workthread = val;
 }
 
-void recognition_face::trainModel()
+void recognition_face::trainModel(int set_model, int threshold)
 {
-    detect_object.train_model();
+    detect_object.set_threshold(threshold);
+    detect_object.train_model(set_model);
 }
 
 QString recognition_face::parserName(int value)

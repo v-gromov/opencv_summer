@@ -1,6 +1,6 @@
 #ifndef FIND_FACE_AND_EYES_H
 #define FIND_FACE_AND_EYES_H
-#include <iostream>
+//#include <iostream>
 #include "mainwindow.h"
 
 #include "opencv2/objdetect.hpp"

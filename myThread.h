@@ -9,7 +9,7 @@
 #include <QThread>
 #include <QFile>
 #include <QFileDialog>
-#include <atomic>
+//#include <atomic>
 #include <QDebug>
 #include <QMutex>
 #include <QMessageBox>
@@ -84,7 +84,7 @@ private:
     QImage SendImage;
     QImage SendImage_for_crop;
     QImage SaveImage;
-    std::atomic<float> scale;
+    //std::atomic<float> scale;
     cameraThread* parrent;
 
 signals:
@@ -102,7 +102,7 @@ signals:
     void sign_getNamePeople(QString);
 public slots:
     void setworkThread(bool);
-    void trainModel();
+    void trainModel(int ,int);
 public:
     recognition_face();
     QString parserName(int);

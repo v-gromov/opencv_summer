@@ -10,6 +10,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->horizontalScrollBar->setValue(71);
     ui->Button_save_face->setEnabled(false);
     flag = false;
+
+    ui->comboBox->addItem("Eigenfaces");
+    ui->comboBox->addItem("Fisherfaces");
+    ui->comboBox->addItem("Local Binary Patterns Histograms");
+    val_combobox = 1;
+    threshold = 3000;
+    ui->lcdNumber->display(threshold);
 }
 
 MainWindow::~MainWindow()
@@ -24,6 +31,7 @@ void MainWindow::send_sign()
 
 void MainWindow::on_Button_create_database_clicked()
 {
+    ui->comboBox->setEnabled(false);
     ui->lineEdit->setEnabled(true);
     ui->lineEdit->clear();
     ui->Button_ok->setEnabled(true);
@@ -57,8 +65,9 @@ void MainWindow::slotSetLableCropImg(QImage imdisplay)
 
 void MainWindow::on_horizontalScrollBar_sliderMoved(int position)
 {
-    ui->lcdNumber->display(position*0.01);
-    emit signSend_scale(position);
+    threshold = position*100+100;
+    ui->lcdNumber->display(threshold);
+   // emit signSend_scale(position);
 }
 
 void MainWindow::on_Button_save_face_clicked()
@@ -74,13 +83,14 @@ void MainWindow::slotPrintNamePeople(QString name)
 void MainWindow::on_Button_Find_face_clicked()
 {
     //Поставим значения баттонов на значения флага
+    ui->comboBox->setEnabled(flag);
     ui->Button_create_database->setEnabled(flag);
     ui->Button_ok->setEnabled(flag);
     ui->Button_save_face->setEnabled(flag);
     //и введем противоположенное значение флага
     flag = !flag;
     if(flag)
-        emit signtrainModel();
+        emit signtrainModel(val_combobox, threshold);
     emit setPlayOrPause(flag);
     emit slotWorkRecogn(flag);
 }
@@ -91,6 +101,7 @@ void MainWindow::slotGetNumbPhoto(int value)
     if(value>=10)
     {
         //и введем противоположенное значение флага
+        ui->comboBox->setEnabled(true);
         flag = !flag;
         ui->Button_create_database->setEnabled(1);
         ui->Button_ok->setEnabled(0);
@@ -98,4 +109,9 @@ void MainWindow::slotGetNumbPhoto(int value)
         ui->Button_Find_face->setEnabled(1);
         ui->lcdNumber_2->display(0);
     }
+}
+
+void MainWindow::on_comboBox_currentIndexChanged(int index)
+{
+    val_combobox = index+1;
 }

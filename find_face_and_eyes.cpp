@@ -1,5 +1,6 @@
 #include "find_face_and_eyes.h"
 
+int dd = 0;
 QVector <face> center_faces(QImage frame, QImage* ResultImg, float scale)
 {
     QVector <face> null_face;

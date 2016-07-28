@@ -32,18 +32,24 @@ private slots:
 
     void on_Button_Find_face_clicked();
 
+    void on_comboBox_currentIndexChanged(int index);
+
 signals:
     void signCreateDatabase(QString);
     void signSend_scale(int);
     void signSendSave();
     void setPlayOrPause(bool flag);
     void slotWorkRecogn(bool);
-    void signtrainModel();
+    void signtrainModel(int,int);
+
+    void stop_cam_timer();
 
     void end_threads();
 private:
     Ui::MainWindow *ui;
     bool flag;
+    int val_combobox;
+    int threshold;
 };
 
 

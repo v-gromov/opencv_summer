@@ -26,14 +26,18 @@ private:
     Point coord_face;
     QVector <Point> coord_eyes;
     QVector <int> radius_eyes;
+};
 
+class cascades
+{
+public:
+    cascades();
+    CascadeClassifier cascade, nestedCascade;
 };
 
 QVector <face> center_faces(QImage, QImage* ResultImg, float);
 
-Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
-                           CascadeClassifier& nestedCascade,
-                           double scale, QVector <face> &find_faces);
+Mat detect_Face_and_eyes( Mat& img, double scale, QVector <face> &find_faces);
 QImage convert_lpl_qimg(IplImage*);
 IplImage convert_qimg_to_lpl(QImage );
 Mat qimage2mat(QImage& qimage);

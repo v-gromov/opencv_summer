@@ -1,13 +1,9 @@
 #include "find_face_and_eyes.h"
 
-int dd = 0;
-QVector <face> center_faces(QImage frame, QImage* ResultImg, float scale)
-{
-    QVector <face> null_face;
-    QVector <face> find_faces;
-    int number_of_true_face = -1;
+cascades obj;
 
-    CascadeClassifier cascade, nestedCascade;
+cascades::cascades()
+{
     string cascadeName = "/home/vgromov/tmp/opencv/opencv/data/haarcascades/haarcascade_frontalface_alt.xml";
     string nestedCascadeName = "/home/vgromov/tmp/opencv/opencv/data/haarcascades/haarcascade_eye_tree_eyeglasses.xml";
 
@@ -16,15 +12,23 @@ QVector <face> center_faces(QImage frame, QImage* ResultImg, float scale)
     if( !cascade.load( cascadeName ) )
     {
         cerr << "ERROR: Could not load classifier cascade" << endl;
-        return null_face;
     }
+}
+
+
+QVector <face> center_faces(QImage frame, QImage* ResultImg, float scale)
+{
+    QVector <face> null_face;
+    QVector <face> find_faces;
+    int number_of_true_face = -1;
+
     Mat image = qimage2mat(frame);
     if(image.empty())
     {
         cout << "Couldn't read image" << endl;
         return null_face;
     }
-    *ResultImg = Mat2QImage(detect_Face_and_eyes(image, cascade, nestedCascade, scale, find_faces));
+    *ResultImg = Mat2QImage(detect_Face_and_eyes(image, scale, find_faces));
     for(int i = 0; i < find_faces.size(); i++)
     {
         if(find_faces[i].number_eyes()>=1)
@@ -37,9 +41,7 @@ QVector <face> center_faces(QImage frame, QImage* ResultImg, float scale)
     return null_face;
 }
 
-Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
-                          CascadeClassifier& nestedCascade,
-                          double scale, QVector <face> &find_faces)
+Mat detect_Face_and_eyes( Mat& img, double scale, QVector <face> &find_faces)
 {
     vector<Rect> faces;
     const static Scalar colors[] =
@@ -58,7 +60,7 @@ Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
     double fx = 1 / scale;
     resize( gray, smallImg, Size(), fx, fx, INTER_LINEAR );
     equalizeHist( smallImg, smallImg );
-    cascade.detectMultiScale( smallImg, faces,
+    obj.cascade.detectMultiScale( smallImg, faces,
                               1.1, 2, 0
                               |CASCADE_SCALE_IMAGE,
                               Size(30, 30) );
@@ -82,7 +84,7 @@ Mat detect_Face_and_eyes( Mat& img, CascadeClassifier& cascade,
             center.y = cvRound((r.y + r.height*0.5)*scale);
         }
         smallImgROI = smallImg( r );
-        nestedCascade.detectMultiScale(smallImgROI, nestedObjects,
+        obj.nestedCascade.detectMultiScale(smallImgROI, nestedObjects,
                                        1.1, 2, 0
                                        |CASCADE_SCALE_IMAGE,
                                        Size(30, 30) );

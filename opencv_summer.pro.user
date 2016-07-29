@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.0.0, 2016-07-28T21:31:40. -->
+<!-- Written by QtCreator 4.0.0, 2016-07-29T14:24:37. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -534,8 +534,8 @@
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">RemoteLinux.DirectUploadStep</value>
       <valuelist type="QVariantList" key="Qt4ProjectManager.MaemoRunConfiguration.LastDeployedFiles">
-       <value type="QString">/home/vgromov/Projects/build-opencv_summer-A20_Lime-Debug/opencv_summer</value>
        <value type="QString">/home/vgromov/Projects/build-opencv_summer-A20_Lime-Release/opencv_summer</value>
+       <value type="QString">/home/vgromov/Projects/build-opencv_summer-A20_Lime-Debug/opencv_summer</value>
       </valuelist>
       <valuelist type="QVariantList" key="Qt4ProjectManager.MaemoRunConfiguration.LastDeployedHosts">
        <value type="QString">A20-OLinuXino.lan</value>
@@ -550,8 +550,8 @@
        <value type="QString">/home/vgromov/rootfs/olimex</value>
       </valuelist>
       <valuelist type="QVariantList" key="Qt4ProjectManager.MaemoRunConfiguration.LastDeployedTimes">
-       <value type="QDateTime">2016-07-22T18:08:31</value>
        <value type="QDateTime">2016-07-22T19:07:29</value>
+       <value type="QDateTime">2016-07-22T18:08:31</value>
       </valuelist>
       <value type="bool" key="RemoteLinux.GenericDirectUploadStep.IgnoreMissingFiles">false</value>
       <value type="bool" key="RemoteLinux.GenericDirectUploadStep.Incremental">true</value>
